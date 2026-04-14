@@ -64,7 +64,7 @@ const teamSlice = createSlice({
                 state.loading = false
                 state.status = "succeed"
                 const team_uuid = action.meta.arg.uuid;
-                state.teams.filter((team) => team.uuid != team_uuid)
+                state.teams = state.teams.filter((team) => team.uuid !== team_uuid);
                 state.total_teams--;
             })
             .addCase(deleteTeam.rejected, (state, action) => {

@@ -10,7 +10,7 @@ export default function Home() {
 
   return (
     <Box>
-      <Image src={user?.image || 'd'} width={100} height={100} alt="user profile" />
+      <Image src={user?.image || 'user.svg'} width={100} height={100} alt="user profile" />
       <Typography>Name - {user?.name}</Typography>
       <Typography>Email - {user?.email}</Typography>
     </Box>

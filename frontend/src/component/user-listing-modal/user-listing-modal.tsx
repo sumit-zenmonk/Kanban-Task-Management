@@ -27,7 +27,7 @@ export default function UserListingModal({ open, onClose }: Props) {
                             {user.email}
                         </Typography>
 
-                        <Image src={user?.image || 'd'} width={100} height={100} alt="user profile" />
+                        <Image src={user?.image || 'user.svg'} width={100} height={100} alt="user profile" />
                     </CardContent>
                 </Card>
             ))}
