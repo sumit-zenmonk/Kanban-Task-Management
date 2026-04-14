@@ -1,0 +1,25 @@
+{
+    "name": "Sumit Kumar",
+    "picture": "https://lh3.googleusercontent.com/a/ACg8ocLzvhDH_57pEEclkGUhY6hx8LFwnhspJdNZIYReP6GD17mc1s4l=s96-c",
+    "iss": "https://securetoken.google.com/zenmonk-training",
+    "aud": "zenmonk-training",
+    "auth_time": 1776144642,
+    "user_id": "dlMxzYFmFGhCLvLwjjRUFsTPhMv2",
+    "sub": "dlMxzYFmFGhCLvLwjjRUFsTPhMv2",
+    "iat": 1776144642,
+    "exp": 1776148242,
+    "email": "sumitkumarshaab@gmail.com",
+    "email_verified": true,
+    "firebase": {
+        "identities": {
+            "google.com": [
+                "100050568444192524554"
+            ],
+            "email": [
+                "sumitkumarshaab@gmail.com"
+            ]
+        },
+        "sign_in_provider": "google.com"
+    },
+    "uid": "dlMxzYFmFGhCLvLwjjRUFsTPhMv2"
+}
