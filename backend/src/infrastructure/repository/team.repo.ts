@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { TeamEntity } from "src/domain/entities/team.entity";
+import { TeamEditDto } from "src/features/team/dto/team.edit.dto";
 import { DataSource, Not, Repository } from "typeorm";
 
 @Injectable()
@@ -11,6 +12,17 @@ export class TeamRepository extends Repository<TeamEntity> {
     async createTeam(body: Partial<TeamEntity>) {
         const team = this.create(body);
         return await this.save(team);
+    }
+
+    async editTeam(body: Partial<TeamEditDto>) {
+        return await this.update(
+            {
+                uuid: body.uuid
+            },
+            {
+                ...body
+            }
+        );
     }
 
     async getTeamByUuid(uuid: string) {

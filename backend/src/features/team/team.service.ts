@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from "@nestjs/common";
 import { TeamCreateDto } from "./dto/team.create.dto";
 import { TeamRepository } from "src/infrastructure/repository/team.repo";
 import { UserEntity } from "src/domain/entities/user.entity";
+import { TeamEditDto } from "./dto/team.edit.dto";
 
 @Injectable()
 export class TeamService {
@@ -22,6 +23,20 @@ export class TeamService {
             message: "Team Created Success"
         }
     }
+
+    async editTeam(body: TeamEditDto) {
+        const isTeamExists = await this.teamRepo.getTeamByUuid(body.uuid);
+
+        if (!isTeamExists) {
+            throw new BadRequestException("Team not found");
+        }
+
+        await this.teamRepo.editTeam(body);
+        return {
+            message: "Team updated Success"
+        }
+    }
+
     async getTeam(user: UserEntity, offset?: number, limit?: number) {
         offset = offset || Number(process.env.page_offset) || 0;
         limit = limit || Number(process.env.page_limit) || 10;

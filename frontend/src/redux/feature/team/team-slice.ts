@@ -2,7 +2,7 @@
 
 import { createSlice } from "@reduxjs/toolkit"
 import { TeamState } from "./team-type"
-import { createTeam, deleteTeam, fetchTeams } from "./team-action"
+import { createTeam, deleteTeam, fetchTeams, updateTeam } from "./team-action"
 
 const initialState: TeamState = {
     teams: [],
@@ -68,6 +68,27 @@ const teamSlice = createSlice({
                 state.total_teams--;
             })
             .addCase(deleteTeam.rejected, (state, action) => {
+                state.loading = false
+                state.status = "rejected"
+                state.error = action.payload as string
+            })
+            .addCase(updateTeam.pending, (state) => {
+                state.loading = true
+                state.status = "pending"
+            })
+            .addCase(updateTeam.fulfilled, (state, action) => {
+                state.loading = false;
+                state.status = "succeed";
+
+                const { uuid, name, description } = action.meta.arg;
+
+                const index = state.teams.findIndex(t => t.uuid === uuid);
+                if (index !== -1) {
+                    state.teams[index].name = name;
+                    state.teams[index].description = description;
+                }
+            })
+            .addCase(updateTeam.rejected, (state, action) => {
                 state.loading = false
                 state.status = "rejected"
                 state.error = action.payload as string

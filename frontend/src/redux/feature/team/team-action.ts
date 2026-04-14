@@ -35,6 +35,35 @@ export const createTeam = createAsyncThunk<
     }
 )
 
+export const updateTeam = createAsyncThunk<
+    Team,
+    { uuid: string, name: string; description: string },
+    { state: RootState }
+>(
+    "team/update",
+    async (payload, { getState, rejectWithValue }) => {
+        try {
+            const token = getState().authReducer.token || ""
+
+            const res = await fetch(`${API_URL}/team`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: token,
+                },
+                body: JSON.stringify(payload),
+            })
+
+            const data = await res.json()
+            if (!res.ok) throw new Error(data.message)
+
+            return data.message
+        } catch (err: any) {
+            return rejectWithValue(err.message)
+        }
+    }
+)
+
 export const fetchTeams = createAsyncThunk<
     FetchTeamsResponse,
     { offset?: number, limit?: number },
@@ -47,7 +76,7 @@ export const fetchTeams = createAsyncThunk<
         try {
             const token = getState().authReducer.token || ""
 
-            const res = await fetch(`${API_URL}/team?offset=${offset}?limit=${limit}`, {
+            const res = await fetch(`${API_URL}/team?offset=${offset}&limit=${limit}`, {
                 method: "GET",
                 headers: {
                     Authorization: token,

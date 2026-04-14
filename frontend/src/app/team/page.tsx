@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 export default function Home() {
     const dispatch = useAppDispatch();
     const [open, setOpen] = useState(false);
+    const [selectedTeam, setSelectedTeam] = useState<any>(null);
     const { user } = useAppSelector((state: RootState) => state.authReducer);
     const { teams, total_teams, loading } = useAppSelector((state: RootState) => state.teamReducer);
     const router = useRouter();
@@ -38,7 +39,13 @@ export default function Home() {
                     </Typography>
                 </Box>
 
-                <Button variant="contained" onClick={() => setOpen(true)}>
+                <Button
+                    variant="contained"
+                    onClick={() => {
+                        setSelectedTeam(null);
+                        setOpen(true);
+                    }}
+                >
                     + Create Team
                 </Button>
             </Box>
@@ -74,9 +81,20 @@ export default function Home() {
                                         {new Date(team.created_at).toLocaleDateString()}
                                     </Typography>
                                 </Box>
+
                                 <Button onClick={() => router.push(`/team/${team.uuid}`)}>
                                     View Team
                                 </Button>
+
+                                <Button
+                                    onClick={() => {
+                                        setSelectedTeam(team);
+                                        setOpen(true);
+                                    }}
+                                >
+                                    Edit
+                                </Button>
+
                                 <Button onClick={() => handleDelete(team.uuid)}>
                                     delete
                                 </Button>
@@ -84,18 +102,19 @@ export default function Home() {
                         </Card>
                     ))}
                 </Box>
-            )
-            }
+            )}
 
-            {
-                !loading && teams.length === 0 && (
-                    <Typography className={styles.empty}>
-                        No teams found. Create your first team
-                    </Typography>
-                )
-            }
+            {!loading && teams.length === 0 && (
+                <Typography className={styles.empty}>
+                    No teams found. Create your first team
+                </Typography>
+            )}
 
-            <CreateTeamModal open={open} onClose={() => setOpen(false)} />
+            <CreateTeamModal
+                open={open}
+                onClose={() => setOpen(false)}
+                team={selectedTeam}
+            />
         </Box >
     );
 }

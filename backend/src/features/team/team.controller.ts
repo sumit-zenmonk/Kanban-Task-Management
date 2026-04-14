@@ -1,7 +1,8 @@
-import { Body, Controller, Delete, Get, Param, Post, Query, Req } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Req } from "@nestjs/common";
 import { TeamService } from "./team.service";
 import { TeamCreateDto } from "./dto/team.create.dto";
 import type { Request } from "express";
+import { TeamEditDto } from "./dto/team.edit.dto";
 
 @Controller('/team')
 export class TeamController {
@@ -25,5 +26,10 @@ export class TeamController {
     @Delete('/:Uuid')
     async deleteTeam(@Param('Uuid') uuid: string) {
         return await this.teamService.deleteTeam(uuid);
+    }
+
+    @Patch()
+    async editTeam(@Body() body: TeamEditDto) {
+        return this.teamService.editTeam(body);
     }
 }

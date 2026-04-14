@@ -4,15 +4,21 @@ import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, }
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAppDispatch } from "@/redux/hooks.ts";
-import { createTeam } from "@/redux/feature/team/team-action";
+import { createTeam, updateTeam } from "@/redux/feature/team/team-action";
 import { TeamFormData, teamSchema } from "@/schemas/schema";
+import { useEffect } from "react";
 
 interface Props {
     open: boolean;
     onClose: () => void;
+    team?: {
+        uuid: string;
+        name: string;
+        description: string;
+    } | null;
 }
 
-export default function CreateTeamModal({ open, onClose }: Props) {
+export default function CreateTeamModal({ open, onClose, team }: Props) {
     const dispatch = useAppDispatch();
 
     const {
@@ -24,15 +30,35 @@ export default function CreateTeamModal({ open, onClose }: Props) {
         resolver: zodResolver(teamSchema),
     });
 
+    useEffect(() => {
+        if (team) {
+            reset({
+                name: team.name,
+                description: team.description,
+            });
+        } else {
+            reset({
+                name: "",
+                description: "",
+            });
+        }
+    }, [team, reset]);
+
     const onSubmit = async (data: TeamFormData) => {
-        await dispatch(createTeam(data));
+        if (team) {
+            await dispatch(updateTeam({ uuid: team.uuid, ...data }));
+        } else {
+            await dispatch(createTeam(data));
+        }
         reset();
         onClose();
     };
 
     return (
         <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
-            <DialogTitle>Create Team</DialogTitle>
+            <DialogTitle>
+                {team ? "Edit Team" : "Create Team"}
+            </DialogTitle>
 
             <DialogContent>
                 <TextField
@@ -59,7 +85,7 @@ export default function CreateTeamModal({ open, onClose }: Props) {
                     Cancel
                 </Button>
                 <Button onClick={handleSubmit(onSubmit)} variant="contained">
-                    Create
+                    {team ? "Update" : "Create"}
                 </Button>
             </DialogActions>
         </Dialog>
