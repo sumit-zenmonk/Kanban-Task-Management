@@ -8,6 +8,7 @@ import styles from "./team.module.css";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks.ts";
 import CreateTeamModal from "@/component/team-modal-form/team-modal-form";
 import { useRouter } from "next/navigation";
+import DeleteIcon from '@mui/icons-material/Delete';
 
 export default function Home() {
     const dispatch = useAppDispatch();
@@ -63,8 +64,13 @@ export default function Home() {
                     {teams.map((team) => (
                         <Card className={styles.card} key={team.uuid}>
                             <CardContent>
-                                <Typography variant="h6">{team.name}</Typography>
+                                <Box className={styles.meta}>
+                                    <Typography variant="h6">{team.name}</Typography>
 
+                                    <Button onClick={() => handleDelete(team.uuid)}>
+                                        <DeleteIcon />
+                                    </Button>
+                                </Box>
                                 <Typography
                                     variant="body2"
                                     color="text.secondary"
@@ -93,10 +99,6 @@ export default function Home() {
                                     }}
                                 >
                                     Edit
-                                </Button>
-
-                                <Button onClick={() => handleDelete(team.uuid)}>
-                                    delete
                                 </Button>
                             </CardContent>
                         </Card>
