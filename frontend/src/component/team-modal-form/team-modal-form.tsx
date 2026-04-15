@@ -5,8 +5,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAppDispatch } from "@/redux/hooks.ts";
 import { createTeam, updateTeam } from "@/redux/feature/team/team-action";
-import { TeamFormData, teamSchema } from "@/schemas/schema";
+import { TeamFormData, teamSchema } from "@/schemas/team-create";
 import { useEffect } from "react";
+import { enqueueSnackbar } from "notistack";
 
 interface Props {
     open: boolean;
@@ -45,13 +46,18 @@ export default function CreateTeamModal({ open, onClose, team }: Props) {
     }, [team, reset]);
 
     const onSubmit = async (data: TeamFormData) => {
-        if (team) {
-            await dispatch(updateTeam({ uuid: team.uuid, ...data }));
-        } else {
-            await dispatch(createTeam(data));
+        try {
+            if (team) {
+                await dispatch(updateTeam({ uuid: team.uuid, ...data }));
+            } else {
+                await dispatch(createTeam(data));
+            }
+            reset();
+            onClose();
+        } catch (err: any) {
+            enqueueSnackbar(err, { variant: "error" });
+            console.log(`${team ? "Edit Team" : "Create Team"} Error`, err);
         }
-        reset();
-        onClose();
     };
 
     return (

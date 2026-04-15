@@ -26,11 +26,11 @@ export class AuthenticateMiddleware implements NestMiddleware {
 
             // check account's presence in DB
             const isExistsAndActiveUser = await this.userRepo.findByUuid(user.uuid);
-            if (!isExistsAndActiveUser.length) {
+            if (!isExistsAndActiveUser) {
                 throw new HttpException("account not found", HttpStatus.UNAUTHORIZED);
             }
 
-            req.user = isExistsAndActiveUser[0]
+            req.user = isExistsAndActiveUser
             // valid request and authenticate account 
 
             next();

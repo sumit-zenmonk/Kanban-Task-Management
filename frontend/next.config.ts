@@ -22,7 +22,7 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'cdn2.thecatapi.com',
+        hostname: 'cdn.jsdelivr.net',
         port: '',
         pathname: '/**',
       },

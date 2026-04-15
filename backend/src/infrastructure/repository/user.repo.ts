@@ -14,7 +14,7 @@ export class UserRepository extends Repository<UserEntity> {
     }
 
     async findByUuid(uuid: string) {
-        const user = await this.find({
+        const user = await this.findOne({
             where: {
                 uuid: uuid
             },
@@ -29,7 +29,7 @@ export class UserRepository extends Repository<UserEntity> {
     }
 
     async findByEmail(email: string) {
-        const user = await this.find({
+        const user = await this.findOne({
             where: {
                 email: email
             },

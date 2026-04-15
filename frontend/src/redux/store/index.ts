@@ -6,6 +6,7 @@ import storage from "redux-persist/lib/storage";
 import authReducer from "../feature/auth/auth-slice";
 import teamReducer from "../feature/team/team-slice";
 import userReducer from "../feature/user/user-slice";
+import memberReducer from "../feature/member/member-slice";
 
 const persistConfig = {
     key: "root",
@@ -15,7 +16,8 @@ const persistConfig = {
 const appReducer = combineReducers({
     authReducer: authReducer,
     teamReducer: teamReducer,
-    userReducer: userReducer
+    userReducer: userReducer,
+    memberReducer: memberReducer
 });
 
 const rootReducer = (state: any, action: any) => {

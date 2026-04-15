@@ -8,13 +8,11 @@ export class MemberEntity {
     @PrimaryGeneratedColumn("uuid")
     uuid: string;
 
-    @ManyToOne(() => UserEntity)
-    @JoinColumn({ name: "member_uuid" })
-    member: UserEntity;
+    @Column()
+    member_uuid: string
 
-    @ManyToOne(() => TeamEntity)
-    @JoinColumn({ name: "team_uuid" })
-    team: TeamEntity;
+    @Column()
+    team_uuid: string
 
     @Column({
         type: "enum",
@@ -23,11 +21,19 @@ export class MemberEntity {
     })
     role: MemberRoleEnum;
 
-    @ManyToOne(() => UserEntity)
+    @ManyToOne(() => UserEntity, (user) => user.memberships)
+    @JoinColumn({ name: "member_uuid" })
+    member: UserEntity;
+
+    @ManyToOne(() => TeamEntity, (team) => team.members)
+    @JoinColumn({ name: "team_uuid" })
+    team: TeamEntity;
+
+    @ManyToOne(() => UserEntity, (user) => user.rolesAssigned)
     @JoinColumn({ name: "role_by" })
     roleBy: UserEntity;
 
-    @ManyToOne(() => UserEntity)
+    @ManyToOne(() => UserEntity, (user) => user.onboardedMembers)
     @JoinColumn({ name: "onboard_by" })
     onboardBy: UserEntity;
 

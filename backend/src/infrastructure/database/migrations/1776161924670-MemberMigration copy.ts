@@ -28,7 +28,7 @@ export class MemberMigration1776161924670 implements MigrationInterface {
         await queryRunner.createForeignKeys("member", [
             new TableForeignKey({
                 columnNames: ["member_uuid"],
-                referencedTableName: "users",
+                referencedTableName: "user",
                 referencedColumnNames: ["uuid"]
             }),
             new TableForeignKey({
@@ -38,12 +38,12 @@ export class MemberMigration1776161924670 implements MigrationInterface {
             }),
             new TableForeignKey({
                 columnNames: ["role_by"],
-                referencedTableName: "users",
+                referencedTableName: "user",
                 referencedColumnNames: ["uuid"]
             }),
             new TableForeignKey({
                 columnNames: ["onboard_by"],
-                referencedTableName: "users",
+                referencedTableName: "user",
                 referencedColumnNames: ["uuid"]
             })
         ]);

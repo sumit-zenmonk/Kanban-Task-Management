@@ -11,7 +11,7 @@ export default function Home() {
 
   return (
     <Box className={styles.container}>
-      <Image src={user?.image || 'user.svg'} width={200} height={200} alt="user profile" />
+      <Image src={user?.image || '/user.svg'} width={200} height={200} alt="user profile" />
       <Typography>Name - {user?.name}</Typography>
       <Typography>Email - {user?.email}</Typography>
     </Box>

@@ -3,11 +3,14 @@ import { TeamCreateDto } from "./dto/team.create.dto";
 import { TeamRepository } from "src/infrastructure/repository/team.repo";
 import { UserEntity } from "src/domain/entities/user.entity";
 import { TeamEditDto } from "./dto/team.edit.dto";
+import { MemberRepository } from "src/infrastructure/repository/member.repo";
+import { MemberRoleEnum } from "src/domain/enums/member.role";
 
 @Injectable()
 export class TeamService {
     constructor(
-        private readonly teamRepo: TeamRepository
+        private readonly teamRepo: TeamRepository,
+        private readonly memberRepo: MemberRepository
     ) {
     }
 
@@ -17,6 +20,14 @@ export class TeamService {
             creator: user,
         });
         const proper_team = await this.teamRepo.getTeamByUuid(team.uuid);
+
+        await this.memberRepo.createMember({
+            team_uuid: team.uuid,
+            member_uuid: user?.uuid,
+            role: MemberRoleEnum.ADMIN,
+            roleBy: user,
+            onboardBy: user
+        });
 
         return {
             data: proper_team,

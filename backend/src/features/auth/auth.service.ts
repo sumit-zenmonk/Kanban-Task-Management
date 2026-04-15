@@ -24,7 +24,7 @@ export class AuthService {
             let users = await this.userRepo.findByEmail(email);
             let user;
 
-            if (!users.length) {
+            if (!users) {
                 const newUser = await this.userRepo.register({
                     email,
                     name: name || "Google User",
@@ -32,7 +32,7 @@ export class AuthService {
                 });
                 user = newUser;
             } else {
-                user = users[0];
+                user = users;
             }
 
             const token = await this.jwtService.generateJwtToken(user);

@@ -1,17 +1,15 @@
 import { MigrationInterface, QueryRunner, Table, TableForeignKey } from "typeorm";
 
-export class TeamMigration1776161924669 implements MigrationInterface {
-    name: "TeamMigration1776161924669"
+export class ProjectMigration1776161924670 implements MigrationInterface {
+    name: "ProjectMigration1776161924670"
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(
             new Table({
-                name: "team",
+                name: "project",
                 columns: [
                     { name: "uuid", type: "uuid", isPrimary: true, default: "uuid_generate_v4()" },
-                    { name: "name", type: "varchar" },
-                    { name: "description", type: "varchar" },
-                    { name: "creator_uuid", type: "uuid" },
+                    { name: "team_uuid", type: "uuid" },
                     { name: "created_at", type: "timestamp", default: "now()" },
                     { name: "updated_at", type: "timestamp", default: "now()" },
                     { name: "deleted_at", type: "timestamp", isNullable: true }
@@ -19,18 +17,16 @@ export class TeamMigration1776161924669 implements MigrationInterface {
             })
         );
 
-        await queryRunner.createForeignKey(
-            "team",
+        await queryRunner.createForeignKeys("project", [
             new TableForeignKey({
-                columnNames: ["creator_uuid"],
-                referencedTableName: "user",
-                referencedColumnNames: ["uuid"],
-                onDelete: "CASCADE"
-            })
-        );
+                columnNames: ["team_uuid"],
+                referencedTableName: "team",
+                referencedColumnNames: ["uuid"]
+            }),
+        ]);
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable("team");
+        await queryRunner.dropTable("project");
     }
 }

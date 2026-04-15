@@ -2,7 +2,7 @@ import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, OneToOne
 import { TeamEntity } from "./team.entity";
 import { MemberEntity } from "./members.entity";
 
-@Entity('users')
+@Entity('user')
 export class UserEntity {
     @PrimaryGeneratedColumn('uuid')
     uuid: string;

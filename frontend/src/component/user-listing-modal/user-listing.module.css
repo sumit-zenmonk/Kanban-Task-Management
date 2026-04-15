@@ -1,0 +1,48 @@
+.dialogContent {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 2%;
+    gap: 2%;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 2%;
+}
+
+.cardContent {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 2%;
+}
+
+.imageWrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.image {
+    width: 30%;
+    height: auto;
+}
+
+.actionBox {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-top: 2%;
+}
+
+.selectControl {
+    width: 48%;
+}
+
+.button {
+    width: 48%;
+}

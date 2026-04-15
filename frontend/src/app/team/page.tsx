@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks.ts";
 import CreateTeamModal from "@/component/team-modal-form/team-modal-form";
 import { useRouter } from "next/navigation";
 import DeleteIcon from '@mui/icons-material/Delete';
+import { enqueueSnackbar } from "notistack";
 
 export default function Home() {
     const dispatch = useAppDispatch();
@@ -25,8 +26,9 @@ export default function Home() {
     const handleDelete = async (uuid: string) => {
         try {
             await dispatch(deleteTeam({ uuid })).unwrap();
-        } catch (err) {
+        } catch (err: any) {
             console.log('Deleteion Team Error', err);
+            enqueueSnackbar(err, { variant: "error" });
         }
     }
 

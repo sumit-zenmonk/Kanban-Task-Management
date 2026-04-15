@@ -8,6 +8,7 @@ import { fetchUsers } from "@/redux/feature/user/user-action";
 import { RootState } from "@/redux/store";
 import { useParams } from "next/navigation";
 import UserListingModal from "@/component/user-listing-modal/user-listing-modal";
+import MemberList from "@/component/member-listing/member-listing";
 
 export default function Home() {
     const [open, setOpen] = useState(false);
@@ -45,6 +46,8 @@ export default function Home() {
             </Button>
 
             <UserListingModal open={open} onClose={() => setOpen(false)} />
+
+            <MemberList />
         </Box>
     );
 }

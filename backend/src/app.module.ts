@@ -13,6 +13,7 @@ import { SocketModule } from './infrastructure/socket/socket.module';
 import { TeamModule } from './features/team/team.module';
 import { UserModule } from './features/user/user.module';
 import { MailerModule } from '@nestjs-modules/mailer';
+import { MemberModule } from './features/member/member.module';
 
 @Module({
   imports: [
@@ -47,7 +48,8 @@ import { MailerModule } from '@nestjs-modules/mailer';
     AuthModule,
     SocketModule,
     TeamModule,
-    UserModule
+    UserModule,
+    MemberModule,
   ],
   controllers: [AppController],
   providers: [AppService, UserRepository, JwtHelperService],
