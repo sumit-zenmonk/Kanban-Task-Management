@@ -4,6 +4,9 @@ import { UserEntity } from "src/domain/entities/user.entity";
 import { MemberCreateDto } from "./dto/member.create.dto";
 import { MemberRepository } from "src/infrastructure/repository/member.repo";
 import { UserRepository } from "src/infrastructure/repository/user.repo";
+import { MemberRoleEnum } from "src/domain/enums/member.role";
+import { MemberUpdateDto } from "./dto/member.update.dto";
+import { MailTrapService } from "src/infrastructure/mailtrap/mailtrap";
 
 @Injectable()
 export class MemberService {
@@ -11,15 +14,24 @@ export class MemberService {
         private readonly teamRepo: TeamRepository,
         private readonly memberRepo: MemberRepository,
         private readonly userRepo: UserRepository,
+        private readonly mailTrapService: MailTrapService,
     ) {
     }
 
     async createMember(user: UserEntity, body: MemberCreateDto) {
+        //team existsance
         const isTeamExists = await this.teamRepo.getTeamByUuid(body.team_uuid);
         if (!isTeamExists) {
             throw new BadRequestException("Team not found");
         }
 
+        // only admin can make admins
+        const isAdmin = isTeamExists.members.filter((mem) => mem.member_uuid == user.uuid);
+        if (isAdmin[0].role == MemberRoleEnum.MEMBER && body.role && (body.role as MemberRoleEnum) == MemberRoleEnum.ADMIN) {
+            throw new BadRequestException("only admin can make admins");
+        }
+
+        // checking existsance of member in team
         const isMemberExists = await this.memberRepo.getMemberByMemberUuidAndTeamUUid(body.team_uuid, body.member_uuid);
         if (isMemberExists) {
             throw new BadRequestException("Member already exists");
@@ -34,6 +46,13 @@ export class MemberService {
             onboardBy: user,
         });
         const proper_member = await this.memberRepo.getMemberByUuid(member.uuid);
+
+        // someone added to team mail sent to user
+        // await this.mailTrapService.sendMail({
+        //     message: `just formal hi hello -> http://localhost:3000/team/${body.team_uuid}`,
+        //     subject: `You have been added to a team`,
+        //     to: member_acc?.email
+        // });
 
         return {
             data: proper_member,
@@ -65,10 +84,34 @@ export class MemberService {
         };
     }
 
-    async deleteMember(uuid: string) {
+    async deleteMember(user: UserEntity, uuid: string) {
+        // member existsance
         const isMemberExists = await this.memberRepo.getMemberByUuid(uuid);
         if (!isMemberExists) {
             throw new BadRequestException("Member not found");
+        }
+
+        //team existsance
+        const isTeamExists = await this.teamRepo.getTeamByUuid(isMemberExists.team_uuid);
+        if (!isTeamExists) {
+            throw new BadRequestException("Team not found");
+        }
+
+        // no one can delete owner not even owner
+        if (isTeamExists.creator.uuid == uuid) {
+            throw new BadRequestException("owner can't be deleted");
+        }
+        if (isTeamExists.creator.uuid == isMemberExists.member_uuid) {
+            throw new BadRequestException("owner can't be deleted");
+        }
+
+        // check if member deleting someone which is not authorised
+        const isAdmin = isTeamExists.members.filter((mem) => mem.member_uuid == user.uuid);
+        if (!isAdmin || !isAdmin.length) {
+            throw new BadRequestException("not authorised");
+        }
+        if (isAdmin[0].role == MemberRoleEnum.MEMBER) {
+            throw new BadRequestException("only admin can delete members");
         }
 
         await this.memberRepo.deleteMember(uuid);
@@ -78,4 +121,31 @@ export class MemberService {
         }
     }
 
+    async updateTeamMember(user: UserEntity, body: MemberUpdateDto) {
+        const isTeamExists = await this.teamRepo.getTeamByUuid(body.team_uuid);
+        if (!isTeamExists) {
+            throw new BadRequestException("Team not found");
+        }
+
+        // only admins can promote other admins
+        const isAdmin = isTeamExists.members.filter((mem) => mem.member_uuid == user.uuid);
+        if (isAdmin[0].role == MemberRoleEnum.MEMBER && body.role && (body.role as MemberRoleEnum) == MemberRoleEnum.ADMIN) {
+            throw new BadRequestException("only admin can promote admins");
+        }
+
+        // ownernship can't be changed
+        if (
+            isTeamExists.creator.uuid === body.uuid &&
+            body.role &&
+            (body.role as MemberRoleEnum) !== MemberRoleEnum.ADMIN
+        ) {
+            throw new BadRequestException("Owner role cannot be changed");
+        }
+
+        await this.memberRepo.updateMember(body);
+
+        return {
+            message: "Member updated Success"
+        }
+    }
 }

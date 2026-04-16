@@ -19,7 +19,7 @@ interface Props {
     } | null;
 }
 
-export default function CreateTeamModal({ open, onClose, team }: Props) {
+export default function CreateTeamModalComp({ open, onClose, team }: Props) {
     const dispatch = useAppDispatch();
 
     const {

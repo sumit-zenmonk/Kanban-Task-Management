@@ -39,8 +39,8 @@ export class AuthService {
 
             //welcome mail send
             // await this.mailTrapService.sendMail({
-            //     message: "hello buddy welcome on joingin",
-            //     subject: `just formal hi hello -> http://localhost:3000/`,
+            //     message: "just formal hi hello -> http://localhost:3000/",
+            //     subject: `hello buddy welcome on joingin`,
             //     to: user.email
             // });
 

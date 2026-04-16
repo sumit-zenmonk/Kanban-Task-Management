@@ -27,8 +27,9 @@ interface Props {
     onClose: () => void;
 }
 
-export default function UserListingModal({ open, onClose }: Props) {
+export default function UserListingModalComp({ open, onClose }: Props) {
     const { users } = useAppSelector((state: RootState) => state.userReducer);
+    const { members } = useAppSelector((state: RootState) => state.memberReducer);
     const dispatch = useAppDispatch();
     const params = useParams();
     const team_uuid = params?.uuid as string;
@@ -60,8 +61,9 @@ export default function UserListingModal({ open, onClose }: Props) {
 
     return (
         <Dialog open={open} onClose={onClose}>
-            <div className={styles.dialogContent}>
+            <Box className={styles.dialogContent}>
                 {users
+                    .filter((user) => members.findIndex((mem => mem.member_uuid == user.uuid && mem.team_uuid == team_uuid)))
                     .map((user) => (
                         <Card key={user.uuid} className={styles.card}>
                             <CardContent className={styles.cardContent}>
@@ -73,7 +75,7 @@ export default function UserListingModal({ open, onClose }: Props) {
                                     {user.email}
                                 </Typography>
 
-                                <div className={styles.imageWrapper}>
+                                <Box className={styles.imageWrapper}>
                                     <Image
                                         src={user?.image || "/user.svg"}
                                         width={100}
@@ -81,7 +83,7 @@ export default function UserListingModal({ open, onClose }: Props) {
                                         alt="user profile"
                                         className={styles.image}
                                     />
-                                </div>
+                                </Box>
 
                                 <Box className={styles.actionBox}>
                                     <FormControl className={styles.selectControl}>
@@ -110,7 +112,7 @@ export default function UserListingModal({ open, onClose }: Props) {
                             </CardContent>
                         </Card>
                     ))}
-            </div>
+            </Box>
         </Dialog>
     );
 }

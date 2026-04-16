@@ -2,7 +2,7 @@
 
 import { createSlice } from "@reduxjs/toolkit"
 import { MemberState } from "./member-type"
-import { createMember, deleteMember, fetchMemberById, fetchMembers, } from "./member-action"
+import { createMember, deleteMember, fetchMemberById, fetchMembers, updateMember, } from "./member-action"
 
 const initialState: MemberState = {
     members: [],
@@ -77,6 +77,21 @@ const memberSlice = createSlice({
                 state.total_members--
             })
             .addCase(deleteMember.rejected, (state, action) => {
+                state.loading = false
+                state.status = "rejected"
+                state.error = action.payload as string
+            })
+            .addCase(updateMember.fulfilled, (state, action) => {
+                state.loading = false
+                state.status = "succeed"
+
+                const index = state.members.findIndex(m => m.member_uuid === action.meta.arg.uuid)
+
+                if (index !== -1) {
+                    state.members[index].role = action.meta.arg.role
+                }
+            })
+            .addCase(updateMember.rejected, (state, action) => {
                 state.loading = false
                 state.status = "rejected"
                 state.error = action.payload as string

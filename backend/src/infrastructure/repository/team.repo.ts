@@ -32,7 +32,8 @@ export class TeamRepository extends Repository<TeamEntity> {
                     uuid: uuid
                 },
                 relations: {
-                    creator: true
+                    creator: true,
+                    members: true
                 }
             }
         );
@@ -40,13 +41,21 @@ export class TeamRepository extends Repository<TeamEntity> {
 
     async getTeam(user_uuid: string, offset?: number, limit?: number) {
         const [data, total] = await this.findAndCount({
-            where: {
-                creator: {
-                    uuid: user_uuid
+            where: [
+                {
+                    creator: {
+                        uuid: user_uuid
+                    },
+                },
+                {
+                    members: {
+                        member_uuid: user_uuid
+                    }
                 }
-            },
+            ],
             relations: {
-                creator: true
+                creator: true,
+                members: true,
             },
             order: {
                 created_at: "DESC",

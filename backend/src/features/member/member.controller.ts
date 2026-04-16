@@ -1,7 +1,8 @@
-import { Body, Controller, Delete, Get, Param, Post, Query, Req } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Req } from "@nestjs/common";
 import type { Request } from "express";
 import { MemberCreateDto } from "./dto/member.create.dto";
 import { MemberService } from "./member.service";
+import { MemberUpdateDto } from "./dto/member.update.dto";
 
 @Controller('/member')
 export class MemberController {
@@ -23,8 +24,12 @@ export class MemberController {
     }
 
     @Delete('/:uuid')
-    async deleteMember(@Param('uuid') uuid: string) {
-        return await this.memberService.deleteMember(uuid);
+    async deleteMember(@Req() req: Request, @Param('uuid') uuid: string) {
+        return await this.memberService.deleteMember(req.user, uuid);
     }
 
+    @Patch()
+    async updateTeamMember(@Req() req: Request, @Body() body: MemberUpdateDto) {
+        return await this.memberService.updateTeamMember(req.user, body);
+    }
 }

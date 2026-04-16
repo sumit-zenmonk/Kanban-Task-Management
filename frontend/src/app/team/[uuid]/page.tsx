@@ -1,14 +1,14 @@
 "use client";
 
-import { useEffect, useState, } from "react";
-import { Box, Button, Card, CardContent, Typography, } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Box, Button, Typography } from "@mui/material";
 import styles from "./team.module.css";
-import { useAppDispatch, useAppSelector, } from "@/redux/hooks.ts";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks.ts";
 import { fetchUsers } from "@/redux/feature/user/user-action";
 import { RootState } from "@/redux/store";
 import { useParams } from "next/navigation";
 import UserListingModal from "@/component/user-listing-modal/user-listing-modal";
-import MemberList from "@/component/member-listing/member-listing";
+import MemberList from "@/component/member-listing-comp/member-listing";
 
 export default function Home() {
     const [open, setOpen] = useState(false);
@@ -26,28 +26,42 @@ export default function Home() {
     if (!selectedTeam) {
         return (
             <Box className={styles.container}>
-                <Typography>
-                    Team not found
-                </Typography>
+                <Typography>Team not found</Typography>
             </Box>
         );
     }
 
     return (
         <Box className={styles.container}>
-            <Typography>Team Details</Typography>
-            <Box>
-                <Typography>{selectedTeam.name}</Typography>
-                <Typography>{selectedTeam.description}</Typography>
+            <Typography className={styles.header}>
+                Team Details
+            </Typography>
+
+            <Box className={styles.teamInfo}>
+                <Box>
+                    <Typography className={styles.teamName}>
+                        {selectedTeam.name}
+                    </Typography>
+                    <Typography className={styles.teamDescription}>
+                        {selectedTeam.description}
+                    </Typography>
+                </Box>
+                <Box className={styles.actions}>
+                    <Button variant="contained" onClick={() => setOpen(true)}>
+                        + Add Member
+                    </Button>
+                </Box>
             </Box>
 
-            <Button variant="contained" onClick={() => setOpen(true)}>
-                +Add Member
-            </Button>
 
             <UserListingModal open={open} onClose={() => setOpen(false)} />
 
-            <MemberList />
+            <Typography className={styles.header}>
+                Members
+            </Typography>
+            <Box className={styles.memberSection}>
+                <MemberList />
+            </Box>
         </Box>
     );
 }

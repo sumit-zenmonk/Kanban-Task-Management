@@ -86,4 +86,15 @@ export class MemberRepository extends Repository<MemberEntity> {
     async deleteMember(uuid: string) {
         return await this.softDelete(uuid);
     }
+
+    async updateMember(body: Partial<MemberEntity>) {
+        return await this.update(
+            {
+                uuid: body.uuid
+            },
+            {
+                ...body
+            }
+        );
+    }
 }

@@ -1,5 +1,46 @@
 .container {
     padding: 24px;
-    max-width: 1100px;
-    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    height: 100%;
+    overflow: scroll;
+}
+
+.header {
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.teamInfo {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    background-color: #f9f9f9;
+    padding: 16px;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+.teamName {
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.teamDescription {
+    font-size: 14px;
+    color: #666;
+}
+
+.actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.memberSection {
+    width: 100%;
+    height: 100%;
+    margin-top: 10px;
+    overflow: scroll;
 }

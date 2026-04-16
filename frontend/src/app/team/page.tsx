@@ -6,7 +6,7 @@ import { RootState } from "@/redux/store";
 import { Box, Button, Typography, CircularProgress, Card, CardContent } from "@mui/material";
 import styles from "./team.module.css";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks.ts";
-import CreateTeamModal from "@/component/team-modal-form/team-modal-form";
+import CreateTeamModal from "@/component/team-modal-form-comp/team-modal-form-comp";
 import { useRouter } from "next/navigation";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { enqueueSnackbar } from "notistack";
@@ -67,7 +67,7 @@ export default function Home() {
                         <Card className={styles.card} key={team.uuid}>
                             <CardContent>
                                 <Box className={styles.meta}>
-                                    <Typography variant="h6">{team.name}</Typography>
+                                    <Typography variant="h6" className={styles.name}>{team.name}</Typography>
 
                                     <Button onClick={() => handleDelete(team.uuid)}>
                                         <DeleteIcon />
