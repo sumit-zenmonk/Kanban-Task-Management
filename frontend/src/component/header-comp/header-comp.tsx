@@ -37,7 +37,7 @@ export default function HeaderComp() {
     return (
         <header className={styles.header}>
             <Box className={styles.leftContainer}>
-                <p>Kanban Manager</p>
+                <p>Kanban Board</p>
             </Box>
 
             <Box className={styles.rightContainer}>
