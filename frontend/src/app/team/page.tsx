@@ -70,7 +70,7 @@ export default function Home() {
                                     <Typography variant="h6" className={styles.name}>{team.name}</Typography>
 
                                     <Button
-                                        sx={{ color: "white", background: "red" }}
+                                        sx={{ color: "white", background: "#DB2D43" }}
                                         variant="contained" onClick={() => handleDelete(team.uuid)}>
                                         <DeleteIcon />
                                     </Button>

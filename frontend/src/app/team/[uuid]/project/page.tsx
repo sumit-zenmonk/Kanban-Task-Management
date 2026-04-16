@@ -70,7 +70,7 @@ export default function ProjectPage() {
 
                                     <Button
                                         variant="contained"
-                                        sx={{ color: "white", background: "red" }}
+                                        sx={{ color: "white", background: "#DB2D43" }}
                                         onClick={() => handleDelete(project.uuid)}
                                     >
                                         <DeleteIcon />

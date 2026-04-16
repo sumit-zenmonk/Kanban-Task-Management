@@ -66,7 +66,7 @@ export default function HeaderComp() {
 
                         <Button
                             variant="contained"
-                            sx={{ color: "white", background: "red" }}
+                            sx={{ color: "white", background: "#DB2D43" }}
                             onClick={async () => {
                                 await handleLogOut()
                                 handleMenuClose()
