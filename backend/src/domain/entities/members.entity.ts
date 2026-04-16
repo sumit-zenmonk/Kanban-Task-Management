@@ -1,7 +1,7 @@
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn, } from "typeorm";
 import { UserEntity } from "./user.entity";
 import { TeamEntity } from "./team.entity";
-import { MemberRoleEnum } from "../enums/member.role";
+import { MemberRoleEnum } from "../enums/member.enum";
 
 @Entity("member")
 export class MemberEntity {

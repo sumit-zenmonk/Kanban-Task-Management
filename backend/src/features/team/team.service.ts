@@ -4,7 +4,7 @@ import { TeamRepository } from "src/infrastructure/repository/team.repo";
 import { UserEntity } from "src/domain/entities/user.entity";
 import { TeamEditDto } from "./dto/team.edit.dto";
 import { MemberRepository } from "src/infrastructure/repository/member.repo";
-import { MemberRoleEnum } from "src/domain/enums/member.role";
+import { MemberRoleEnum } from "src/domain/enums/member.enum";
 
 @Injectable()
 export class TeamService {

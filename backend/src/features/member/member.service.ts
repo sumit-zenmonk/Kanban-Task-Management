@@ -4,7 +4,7 @@ import { UserEntity } from "src/domain/entities/user.entity";
 import { MemberCreateDto } from "./dto/member.create.dto";
 import { MemberRepository } from "src/infrastructure/repository/member.repo";
 import { UserRepository } from "src/infrastructure/repository/user.repo";
-import { MemberRoleEnum } from "src/domain/enums/member.role";
+import { MemberRoleEnum } from "src/domain/enums/member.enum";
 import { MemberUpdateDto } from "./dto/member.update.dto";
 import { MailTrapService } from "src/infrastructure/mailtrap/mailtrap";
 import { SocketService } from "src/infrastructure/socket/socket.service";

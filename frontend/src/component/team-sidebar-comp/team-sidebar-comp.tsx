@@ -38,15 +38,22 @@ export default function TeamSidebarComp({ teams }: { teams: TeamState }) {
 
                     {activeTeam === team.uuid && (
                         <Box className={styles.projectContainer}>
-                            {(team.projects ?? [])
-                                .filter((project) => project.team_uuid === team.uuid)
-                                .map((project) => (
-                                    <Box key={project.uuid} className={styles.project}>
-                                        <Typography variant="body2">
-                                            {project.name}
-                                        </Typography>
-                                    </Box>
-                                ))}
+                            <Button
+                                onClick={() => router.push(`/team/${team.uuid}/project`)}
+                                variant="outlined">
+                                Go To Projects
+                            </Button>
+                            <Box className={styles.projectBox}>
+                                {(team.projects ?? [])
+                                    .filter((project) => project.team_uuid === team.uuid)
+                                    .map((project) => (
+                                        <Box key={project.uuid} className={styles.project}>
+                                            <Typography variant="body2">
+                                                {project.name}
+                                            </Typography>
+                                        </Box>
+                                    ))}
+                            </Box>
                         </Box>
                     )}
                 </Box>

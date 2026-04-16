@@ -47,6 +47,14 @@
     padding-left: 10%;
 }
 
+.projectBox {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 2%;
+    padding-left: 10%;
+}
+
 .project {
     width: 100%;
     padding: 4%;
