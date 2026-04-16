@@ -1,6 +1,7 @@
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { TeamEntity } from "./team.entity";
 import { MemberEntity } from "./members.entity";
+import { ProjectEntity } from "./project.entity";
 
 @Entity('user')
 export class UserEntity {
@@ -27,6 +28,9 @@ export class UserEntity {
 
     @OneToMany(() => MemberEntity, (member) => member.onboardBy)
     onboardedMembers: MemberEntity[];
+
+    @OneToMany(() => ProjectEntity, (project) => project.creator)
+    projects: ProjectEntity[]
 
     @CreateDateColumn()
     created_at: Date;

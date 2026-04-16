@@ -7,6 +7,7 @@ import { UserRepository } from "src/infrastructure/repository/user.repo";
 import { MemberRoleEnum } from "src/domain/enums/member.role";
 import { MemberUpdateDto } from "./dto/member.update.dto";
 import { MailTrapService } from "src/infrastructure/mailtrap/mailtrap";
+import { SocketService } from "src/infrastructure/socket/socket.service";
 
 @Injectable()
 export class MemberService {
@@ -15,6 +16,7 @@ export class MemberService {
         private readonly memberRepo: MemberRepository,
         private readonly userRepo: UserRepository,
         private readonly mailTrapService: MailTrapService,
+        private readonly socketService: SocketService,
     ) {
     }
 
@@ -53,6 +55,9 @@ export class MemberService {
         //     subject: `You have been added to a team`,
         //     to: member_acc?.email
         // });
+
+        //send realtime-team added
+        await this.socketService.emitToUser(member.member_uuid, 'member_team_joined', isTeamExists);
 
         return {
             data: proper_member,
@@ -116,6 +121,9 @@ export class MemberService {
 
         await this.memberRepo.deleteMember(uuid);
 
+        //send realtime-team removed
+        await this.socketService.emitToUser(isMemberExists.member_uuid, 'member_removed_team', isTeamExists);
+
         return {
             message: "Member deleted Success"
         }
@@ -125,6 +133,11 @@ export class MemberService {
         const isTeamExists = await this.teamRepo.getTeamByUuid(body.team_uuid);
         if (!isTeamExists) {
             throw new BadRequestException("Team not found");
+        }
+
+        // own role can chnaged
+        if (user.uuid = body.uuid) {
+            throw new BadRequestException("Own Role can't be changed");
         }
 
         // only admins can promote other admins
@@ -142,7 +155,7 @@ export class MemberService {
             throw new BadRequestException("Owner role cannot be changed");
         }
 
-        await this.memberRepo.updateMember(body);
+        await this.memberRepo.updateMember({ ...body, roleBy: user });
 
         return {
             message: "Member updated Success"

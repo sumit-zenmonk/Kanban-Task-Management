@@ -49,7 +49,7 @@ export default function Home() {
                         setOpen(true);
                     }}
                 >
-                    + Create Team
+                    Create Team
                 </Button>
             </Box>
 
@@ -62,14 +62,16 @@ export default function Home() {
                     <CircularProgress />
                 </Box>
             ) : (
-                <Box>
+                <Box className={styles.teamBox}>
                     {teams.map((team) => (
                         <Card className={styles.card} key={team.uuid}>
                             <CardContent>
                                 <Box className={styles.meta}>
                                     <Typography variant="h6" className={styles.name}>{team.name}</Typography>
 
-                                    <Button onClick={() => handleDelete(team.uuid)}>
+                                    <Button
+                                        sx={{ color: "white", background: "red" }}
+                                        variant="contained" onClick={() => handleDelete(team.uuid)}>
                                         <DeleteIcon />
                                     </Button>
                                 </Box>
@@ -90,18 +92,31 @@ export default function Home() {
                                     </Typography>
                                 </Box>
 
-                                <Button onClick={() => router.push(`/team/${team.uuid}`)}>
-                                    View Team
-                                </Button>
+                                <Box className={styles.actionBox}>
+                                    <Button
+                                        variant="contained"
+                                        onClick={() => router.push(`/team/${team.uuid}`)}
+                                    >
+                                        View Team
+                                    </Button>
 
-                                <Button
-                                    onClick={() => {
-                                        setSelectedTeam(team);
-                                        setOpen(true);
-                                    }}
-                                >
-                                    Edit
-                                </Button>
+                                    <Button
+                                        variant="contained"
+                                        onClick={() => router.push(`/team/${team.uuid}/project`)}
+                                    >
+                                        View Projects
+                                    </Button>
+
+                                    <Button
+                                        variant="contained"
+                                        onClick={() => {
+                                            setSelectedTeam(team);
+                                            setOpen(true);
+                                        }}
+                                    >
+                                        Edit Team
+                                    </Button>
+                                </Box>
                             </CardContent>
                         </Card>
                     ))}

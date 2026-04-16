@@ -45,7 +45,7 @@ export default function UserListingModalComp({ open, onClose }: Props) {
                 })
             ).unwrap();
 
-            onClose();
+            // onClose();
         } catch (err: any) {
             console.log(err);
             enqueueSnackbar(err, { variant: "error" });
@@ -63,7 +63,7 @@ export default function UserListingModalComp({ open, onClose }: Props) {
         <Dialog open={open} onClose={onClose}>
             <Box className={styles.dialogContent}>
                 {users
-                    .filter((user) => members.findIndex((mem => mem.member_uuid == user.uuid && mem.team_uuid == team_uuid)))
+                    .filter(user => !members.some(mem => mem.member_uuid === user.uuid && mem.team_uuid === team_uuid))
                     .map((user) => (
                         <Card key={user.uuid} className={styles.card}>
                             <CardContent className={styles.cardContent}>

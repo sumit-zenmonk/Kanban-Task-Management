@@ -38,7 +38,7 @@ export default function LoginForm() {
                 </Typography>
 
                 <Button
-                    variant="outlined"
+                    variant="contained"
                     className={styles.providerLoginBox}
                     onClick={handleGoogleLogin}
                 >

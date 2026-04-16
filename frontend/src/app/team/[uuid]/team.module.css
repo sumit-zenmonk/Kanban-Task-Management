@@ -15,12 +15,14 @@
 
 .teamInfo {
     width: 100%;
+    height: 20%;
     display: flex;
     justify-content: space-between;
     background-color: #f9f9f9;
     padding: 16px;
     border-radius: 8px;
-    border: 1px solid #e0e0e0;
+    border: 1px solid #000000;
+    position: relative;
 }
 
 .teamName {
@@ -30,17 +32,21 @@
 
 .teamDescription {
     font-size: 14px;
-    color: #666;
+    width: 50%;
+    height: 80%;
+    margin: 8px 0;
+    overflow: scroll;
 }
 
 .actions {
     display: flex;
     justify-content: flex-end;
+    position: absolute;
+    right: 10;
 }
 
 .memberSection {
     width: 100%;
-    height: 100%;
-    margin-top: 10px;
+    height: 80%;
     overflow: scroll;
 }

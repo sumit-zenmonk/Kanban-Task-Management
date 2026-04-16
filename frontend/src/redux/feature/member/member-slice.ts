@@ -81,14 +81,15 @@ const memberSlice = createSlice({
                 state.status = "rejected"
                 state.error = action.payload as string
             })
-            .addCase(updateMember.fulfilled, (state, action) => {
+            .addCase(updateMember.fulfilled, (state, action: any) => {
                 state.loading = false
                 state.status = "succeed"
 
-                const index = state.members.findIndex(m => m.member_uuid === action.meta.arg.uuid)
+                const index = state.members.findIndex(m => m.uuid === action.meta.arg.uuid)
 
                 if (index !== -1) {
                     state.members[index].role = action.meta.arg.role
+                    state.members[index].roleBy = action.payload.user
                 }
             })
             .addCase(updateMember.rejected, (state, action) => {

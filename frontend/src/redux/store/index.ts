@@ -7,6 +7,7 @@ import authReducer from "../feature/auth/auth-slice";
 import teamReducer from "../feature/team/team-slice";
 import userReducer from "../feature/user/user-slice";
 import memberReducer from "../feature/member/member-slice";
+import projectReducer from "../feature/project/project-slice";
 
 const persistConfig = {
     key: "root",
@@ -17,7 +18,8 @@ const appReducer = combineReducers({
     authReducer: authReducer,
     teamReducer: teamReducer,
     userReducer: userReducer,
-    memberReducer: memberReducer
+    memberReducer: memberReducer,
+    projectReducer: projectReducer
 });
 
 const rootReducer = (state: any, action: any) => {

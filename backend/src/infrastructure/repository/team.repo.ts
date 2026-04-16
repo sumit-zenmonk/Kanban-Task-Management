@@ -33,7 +33,8 @@ export class TeamRepository extends Repository<TeamEntity> {
                 },
                 relations: {
                     creator: true,
-                    members: true
+                    members: true,
+                    projects: true
                 }
             }
         );
@@ -56,6 +57,7 @@ export class TeamRepository extends Repository<TeamEntity> {
             relations: {
                 creator: true,
                 members: true,
+                projects: true
             },
             order: {
                 created_at: "DESC",

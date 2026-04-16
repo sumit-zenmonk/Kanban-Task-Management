@@ -1,74 +1,70 @@
 "use client";
 
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, } from "@mui/material";
+import {
+    Dialog, DialogTitle, DialogContent,
+    DialogActions, Button, TextField
+} from "@mui/material";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useAppDispatch } from "@/redux/hooks.ts";
-import { createTeam, updateTeam } from "@/redux/feature/team/team-action";
-import { TeamFormData, teamSchema } from "@/schemas/team-create";
 import { useEffect } from "react";
+import { createProject, updateProject } from "@/redux/feature/project/project-action";
 import { enqueueSnackbar } from "notistack";
+import { useAppDispatch } from "@/redux/hooks.ts";
+import { ProjectFormData, projectSchema } from "@/schemas/project.schema";
+import { fetchTeams } from "@/redux/feature/team/team-action";
 
 interface Props {
     open: boolean;
     onClose: () => void;
-    team?: {
-        uuid: string;
-        name: string;
-        description: string;
-    } | null;
+    team_uuid: string;
+    project?: any;
 }
 
-export default function CreateTeamModalComp({ open, onClose, team }: Props) {
+export default function ProjectModal({ open, onClose, team_uuid, project }: Props) {
     const dispatch = useAppDispatch();
 
     const {
         register,
         handleSubmit,
-        formState: { errors },
         reset,
-    } = useForm<TeamFormData>({
-        resolver: zodResolver(teamSchema),
+        formState: { errors },
+    } = useForm<ProjectFormData>({
+        resolver: zodResolver(projectSchema),
     });
 
     useEffect(() => {
-        if (team) {
-            reset({
-                name: team.name,
-                description: team.description,
-            });
+        if (project) {
+            reset(project);
         } else {
-            reset({
-                name: "",
-                description: "",
-            });
+            reset({ name: "", description: "" });
         }
-    }, [team, reset]);
+    }, [project, reset]);
 
-    const onSubmit = async (data: TeamFormData) => {
+    const onSubmit = async (data: ProjectFormData) => {
         try {
-            if (team) {
-                await dispatch(updateTeam({ uuid: team.uuid, ...data }));
+            if (project) {
+                await dispatch(updateProject({ ...data, uuid: project.uuid })).unwrap();
             } else {
-                await dispatch(createTeam(data));
+                await dispatch(createProject({ ...data, team_uuid })).unwrap();
             }
-            reset();
+            await dispatch(fetchTeams({})).unwrap();
+
             onClose();
+            reset();
         } catch (err: any) {
             enqueueSnackbar(err, { variant: "error" });
-            console.log(`${team ? "Edit Team" : "Create Team"} Error`, err);
         }
     };
 
     return (
         <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
             <DialogTitle>
-                {team ? "Edit Team" : "Create Team"}
+                {project ? "Edit Project" : "Create Project"}
             </DialogTitle>
 
             <DialogContent>
                 <TextField
-                    label="Title"
+                    label="Name"
                     fullWidth
                     margin="normal"
                     {...register("name")}
@@ -87,11 +83,9 @@ export default function CreateTeamModalComp({ open, onClose, team }: Props) {
             </DialogContent>
 
             <DialogActions>
-                <Button onClick={onClose} color="secondary" variant="contained">
-                    Cancel
-                </Button>
+                <Button variant="contained" onClick={onClose} color="secondary"     >Cancel</Button>
                 <Button onClick={handleSubmit(onSubmit)} variant="contained">
-                    {team ? "Update" : "Create"}
+                    {project ? "Update" : "Create"}
                 </Button>
             </DialogActions>
         </Dialog>

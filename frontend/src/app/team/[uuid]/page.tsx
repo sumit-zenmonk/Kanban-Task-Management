@@ -48,7 +48,7 @@ export default function Home() {
                 </Box>
                 <Box className={styles.actions}>
                     <Button variant="contained" onClick={() => setOpen(true)}>
-                        + Add Member
+                        Add Member
                     </Button>
                 </Box>
             </Box>

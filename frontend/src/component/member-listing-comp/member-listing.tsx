@@ -27,7 +27,7 @@ export default function MemberList() {
 
     const filteredMembers = members.filter((m) => m.team_uuid === team_uuid)
 
-    if (loading) return <p>Loading...</p>
+    // if (loading) return <p>Loading...</p>
 
     const handleDeleteMember = async (uuid: string) => {
         try {
@@ -61,13 +61,51 @@ export default function MemberList() {
                             />
                         </Box>
                         <Box className={styles.info}>
+                            <Box className={styles.infoBox}>
+                                <Typography className={styles.infoTitle}>
+                                    Name:
+                                </Typography>
+                                <Typography className={styles.infoDefine}>
+                                    {member.member.name}
+                                </Typography>
+                            </Box>
+
+                            <Box className={styles.infoBox}>
+                                <Typography className={styles.infoTitle}>
+                                    Email:
+                                </Typography>
+
+                                <Typography className={styles.infoDefine}>
+                                    {member.member.email}
+                                </Typography>
+                            </Box>
+
+                            <Box className={styles.infoBox}>
+                                <Typography className={styles.infoTitle}>
+                                    Onboard By:
+                                </Typography>
+                                <Typography className={styles.infoDefine}>
+                                    {member.onboardBy.email}
+                                </Typography>
+                            </Box>
+
+                            <Box className={styles.infoBox}>
+                                <Typography className={styles.infoTitle}>
+                                    Role By:
+                                </Typography>
+                                <Typography className={styles.infoDefine}>
+                                    {member.roleBy.email}
+                                </Typography>
+                            </Box>
+                        </Box>
+                        <Box className={styles.actions}>
                             <Select
                                 size="small"
                                 value={member.role}
                                 className={styles.select}
                                 onChange={(e) => {
                                     handlePromoteMember({
-                                        uuid: member.member_uuid,
+                                        uuid: member.uuid,
                                         team_uuid: member.team_uuid,
                                         role: e.target.value as MemberRoleEnum
                                     });
@@ -76,21 +114,19 @@ export default function MemberList() {
                                 <MenuItem value={MemberRoleEnum.ADMIN}>Admin</MenuItem>
                                 <MenuItem value={MemberRoleEnum.MEMBER}>Member</MenuItem>
                             </Select>
-                            <Typography>
-                                Name: {member.member.name}
-                            </Typography>
-                            <Typography>
-                                Email: {member.member.email}
-                            </Typography>
-                        </Box>
-                        <Box className={styles.actions}>
-                            <Button onClick={() => handleDeleteMember(member.uuid)}>
+
+                            <Button
+                                variant="contained"
+                                sx={{ color: "white", background: "red" }}
+                                onClick={() => handleDeleteMember(member.uuid)}
+                            >
                                 <DeleteIcon />
                             </Button>
                         </Box>
                     </CardContent>
                 </Card>
-            ))}
+            ))
+            }
 
             {
                 filteredMembers.length === 0 && (

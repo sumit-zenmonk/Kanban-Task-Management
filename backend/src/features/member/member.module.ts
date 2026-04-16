@@ -5,11 +5,12 @@ import { MemberController } from "./member.controller";
 import { MemberService } from "./member.service";
 import { MemberRepository } from "src/infrastructure/repository/member.repo";
 import { MailTrapService } from "src/infrastructure/mailtrap/mailtrap";
+import { SocketModule } from "src/infrastructure/socket/socket.module";
 
 @Module({
     imports: [],
     controllers: [MemberController],
-    providers: [UserRepository, MemberService, TeamRepository, MemberRepository, MailTrapService],
+    providers: [UserRepository, MemberService, TeamRepository, MemberRepository, MailTrapService, SocketModule],
     exports: [MemberModule],
 })
 

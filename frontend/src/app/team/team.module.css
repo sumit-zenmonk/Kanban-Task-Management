@@ -23,6 +23,11 @@
     margin-top: 40px;
 }
 
+.teamBox {
+    height: 88%;
+    overflow: scroll;
+}
+
 .card {
     border-radius: 12px;
     transition: 0.2s ease;
@@ -35,7 +40,10 @@
 }
 
 .description {
+    width: 50%;
+    height: 100px;
     margin: 8px 0;
+    overflow: scroll;
 }
 
 .name {
@@ -53,4 +61,10 @@
     text-align: center;
     margin-top: 40px;
     color: gray;
+}
+
+.actionBox {
+    width: 25%;
+    display: flex;
+    justify-content: space-around;
 }

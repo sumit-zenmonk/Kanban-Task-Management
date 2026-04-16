@@ -2,22 +2,21 @@
 
 import { RootState } from "@/redux/store"
 import { createAsyncThunk } from "@reduxjs/toolkit"
-import { FetchMembersResponse, Member } from "./member-type"
-import { MemberRoleEnum } from "@/enums/member.role"
+import { FetchProjectsResponse, Project } from "./project-type"
 
 const API_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL
 
-export const createMember = createAsyncThunk<
-    Member,
-    { member_uuid: string; team_uuid: string, role: string },
+export const createProject = createAsyncThunk<
+    Project,
+    { team_uuid: string; name: string; description: string },
     { state: RootState }
 >(
-    "member/create",
+    "project/create",
     async (payload, { getState, rejectWithValue }) => {
         try {
             const token = getState().authReducer.token || ""
 
-            const res = await fetch(`${API_URL}/member`, {
+            const res = await fetch(`${API_URL}/project`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -36,31 +35,29 @@ export const createMember = createAsyncThunk<
     }
 )
 
-export const fetchMembers = createAsyncThunk<
-    FetchMembersResponse,
-    { offset?: number; limit?: number },
+export const fetchProjects = createAsyncThunk<
+    FetchProjectsResponse,
+    { offset?: number; limit?: number; team_uuid: string },
     { state: RootState }
 >(
-    "member/fetch",
-    async (
-        { limit = 10, offset = 0 },
-        { getState, rejectWithValue }
-    ) => {
+    "project/fetch",
+    async ({ offset = 0, limit = 10, team_uuid }, { getState, rejectWithValue }) => {
         try {
             const token = getState().authReducer.token || ""
 
-            const res = await fetch(`${API_URL}/member?offset=${offset}&limit=${limit}`, {
-                method: "GET",
-                headers: {
-                    Authorization: token,
-                },
-            })
+            const res = await fetch(
+                `${API_URL}/project?offset=${offset}&limit=${limit}&team_uuid=${team_uuid}`,
+                {
+                    method: "GET",
+                    headers: { Authorization: token },
+                }
+            )
 
             const data = await res.json()
             if (!res.ok) throw new Error(data.message)
 
             return {
-                members: data.data,
+                projects: data.data,
                 total: data.totalDocuments,
             }
         } catch (err: any) {
@@ -69,21 +66,19 @@ export const fetchMembers = createAsyncThunk<
     }
 )
 
-export const fetchMemberById = createAsyncThunk<
-    Member,
+export const fetchProjectById = createAsyncThunk<
+    Project,
     { uuid: string },
     { state: RootState }
 >(
-    "member/fetchById",
+    "project/fetchById",
     async ({ uuid }, { getState, rejectWithValue }) => {
         try {
             const token = getState().authReducer.token || ""
 
-            const res = await fetch(`${API_URL}/member/${uuid}`, {
+            const res = await fetch(`${API_URL}/project/${uuid}`, {
                 method: "GET",
-                headers: {
-                    Authorization: token,
-                },
+                headers: { Authorization: token },
             })
 
             const data = await res.json()
@@ -96,21 +91,19 @@ export const fetchMemberById = createAsyncThunk<
     }
 )
 
-export const deleteMember = createAsyncThunk<
+export const deleteProject = createAsyncThunk<
     { message: string },
     { uuid: string },
     { state: RootState }
 >(
-    "member/delete",
+    "project/delete",
     async ({ uuid }, { getState, rejectWithValue }) => {
         try {
             const token = getState().authReducer.token || ""
 
-            const res = await fetch(`${API_URL}/member/${uuid}`, {
+            const res = await fetch(`${API_URL}/project/${uuid}`, {
                 method: "DELETE",
-                headers: {
-                    Authorization: token,
-                },
+                headers: { Authorization: token },
             })
 
             const data = await res.json()
@@ -123,23 +116,21 @@ export const deleteMember = createAsyncThunk<
     }
 )
 
-
-export const updateMember = createAsyncThunk<
+export const updateProject = createAsyncThunk<
     { message: string },
-    { uuid: string, team_uuid: string, role: MemberRoleEnum },
+    { uuid: string; name?: string; description?: string },
     { state: RootState }
 >(
-    "member/update",
+    "project/update",
     async (payload, { getState, rejectWithValue }) => {
         try {
             const token = getState().authReducer.token || ""
-            const user = getState().authReducer.user || ""
 
-            const res = await fetch(`${API_URL}/member`, {
+            const res = await fetch(`${API_URL}/project`, {
                 method: "PATCH",
                 headers: {
-                    Authorization: token,
                     "Content-Type": "application/json",
+                    Authorization: token,
                 },
                 body: JSON.stringify(payload),
             })
@@ -147,7 +138,7 @@ export const updateMember = createAsyncThunk<
             const data = await res.json()
             if (!res.ok) throw new Error(data.message)
 
-            return { message: data.message, user }
+            return data.message
         } catch (err: any) {
             return rejectWithValue(err.message)
         }

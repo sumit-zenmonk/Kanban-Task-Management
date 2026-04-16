@@ -38,10 +38,27 @@
     width: 60%;
 }
 
+.infoBox {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20%;
+    margin-top: 5px;
+}
+
+.infoTitle,
+.infoDefine {
+    border: 1px solid rgb(0, 0, 0);
+    padding: 1% 3%;
+    border-radius: 100px;
+    background-color: rgb(233, 233, 233);
+    font-weight: 600;
+}
+
 .actions {
     display: flex;
     justify-content: flex-end;
     width: 20%;
+    gap: 10px;
 }
 
 .select {

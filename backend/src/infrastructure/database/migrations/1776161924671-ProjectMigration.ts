@@ -9,7 +9,10 @@ export class ProjectMigration1776161924670 implements MigrationInterface {
                 name: "project",
                 columns: [
                     { name: "uuid", type: "uuid", isPrimary: true, default: "uuid_generate_v4()" },
+                    { name: "name", type: "varchar" },
+                    { name: "description", type: "varchar" },
                     { name: "team_uuid", type: "uuid" },
+                    { name: "creator_uuid", type: "uuid" },
                     { name: "created_at", type: "timestamp", default: "now()" },
                     { name: "updated_at", type: "timestamp", default: "now()" },
                     { name: "deleted_at", type: "timestamp", isNullable: true }
@@ -21,6 +24,11 @@ export class ProjectMigration1776161924670 implements MigrationInterface {
             new TableForeignKey({
                 columnNames: ["team_uuid"],
                 referencedTableName: "team",
+                referencedColumnNames: ["uuid"]
+            }),
+            new TableForeignKey({
+                columnNames: ["creator_uuid"],
+                referencedTableName: "user",
                 referencedColumnNames: ["uuid"]
             }),
         ]);

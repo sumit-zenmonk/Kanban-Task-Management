@@ -1,45 +1,52 @@
 "use client";
 
 import { useState } from "react";
-import { Box, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import styles from "./team-sidebar-comp.module.css";
 import { useRouter } from "next/navigation";
+import { TeamState } from "@/redux/feature/team/team-type";
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
-type Team = {
-    uuid: string;
-    name: string;
-};
-
-const dummyProjects = ["Project A", "Project B", "Project C"];
-
-export default function TeamSidebarComp({ teams }: { teams: Team[] }) {
+export default function TeamSidebarComp({ teams }: { teams: TeamState }) {
     const [activeTeam, setActiveTeam] = useState<string | null>(null);
     const router = useRouter();
 
     return (
         <Box className={styles.sidebar}>
-            <Typography className={styles.heading}>Teams</Typography>
+            <Typography
+                className={styles.heading}
+                onClick={() => router.push(`/team`)}
+            >
+                Teams
+            </Typography>
 
-            {teams.map((team) => (
+            {teams.teams.map((team) => (
                 <Box key={team.uuid} className={styles.teamContainer}>
                     <Box
                         className={styles.team}
-                        onClick={() => {
-                            setActiveTeam(activeTeam === team.uuid ? null : team.uuid)
-                            router.push(`/team/${team.uuid}`);
-                        }
-                        }
                     >
-                        <Typography>{team.name}</Typography>
+                        <Typography onClick={() => router.push(`/team/${team.uuid}`)}>{team.name}</Typography>
+                        <Button
+                            variant="contained"
+                            onClick={() => {
+                                setActiveTeam(activeTeam === team.uuid ? null : team.uuid);
+                            }}>
+                            {activeTeam === team.uuid ? <KeyboardArrowDownIcon /> : <KeyboardArrowUpIcon />}
+                        </Button>
                     </Box>
 
                     {activeTeam === team.uuid && (
                         <Box className={styles.projectContainer}>
-                            {dummyProjects.map((project, index) => (
-                                <Box key={index} className={styles.project}>
-                                    <Typography variant="body2">{project}</Typography>
-                                </Box>
-                            ))}
+                            {(team.projects ?? [])
+                                .filter((project) => project.team_uuid === team.uuid)
+                                .map((project) => (
+                                    <Box key={project.uuid} className={styles.project}>
+                                        <Typography variant="body2">
+                                            {project.name}
+                                        </Typography>
+                                    </Box>
+                                ))}
                         </Box>
                     )}
                 </Box>

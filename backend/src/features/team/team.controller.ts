@@ -24,8 +24,8 @@ export class TeamController {
     }
 
     @Delete('/:Uuid')
-    async deleteTeam(@Param('Uuid') uuid: string) {
-        return await this.teamService.deleteTeam(uuid);
+    async deleteTeam(@Req() req: Request, @Param('Uuid') uuid: string) {
+        return await this.teamService.deleteTeam(req.user,uuid);
     }
 
     @Patch()

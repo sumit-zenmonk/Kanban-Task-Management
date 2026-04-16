@@ -10,7 +10,7 @@ import { MemberRoleEnum } from "src/domain/enums/member.role";
 export class TeamService {
     constructor(
         private readonly teamRepo: TeamRepository,
-        private readonly memberRepo: MemberRepository
+        private readonly memberRepo: MemberRepository,
     ) {
     }
 
@@ -73,11 +73,15 @@ export class TeamService {
         }
     }
 
-    async deleteTeam(uuid: string) {
+    async deleteTeam(user: UserEntity, uuid: string) {
         const team = await this.teamRepo.getTeamByUuid(uuid);
 
         if (!team) {
             throw new BadRequestException("Team not found");
+        }
+
+        if (team.creator.uuid !== user.uuid) {
+            throw new BadRequestException("Only Owner can delete Team");
         }
 
         await this.teamRepo.deleteTeam(uuid);
