@@ -45,7 +45,7 @@ export default function HeaderComp() {
                 {user ? (
                     <>
                         <Button
-                            variant="contained"
+                            variant="outlined"
                             onClick={() => {
                                 router.push("/")
                                 handleMenuClose()
@@ -55,7 +55,7 @@ export default function HeaderComp() {
                         </Button>
 
                         <Button
-                            variant="contained"
+                            variant="outlined"
                             onClick={() => {
                                 router.push("/team")
                                 handleMenuClose()
@@ -65,7 +65,7 @@ export default function HeaderComp() {
                         </Button>
 
                         <Button
-                            variant="contained"
+                            variant="outlined"
                             sx={{ color: "white", background: "#DB2D43" }}
                             onClick={async () => {
                                 await handleLogOut()
@@ -77,7 +77,7 @@ export default function HeaderComp() {
                     </>
                 ) : (
                     <Button
-                        variant="contained"
+                        variant="outlined"
                         onClick={() => {
                             router.push("/login")
                             handleMenuClose()

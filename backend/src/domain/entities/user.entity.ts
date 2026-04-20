@@ -2,6 +2,7 @@ import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, OneToOne
 import { TeamEntity } from "./team.entity";
 import { MemberEntity } from "./members.entity";
 import { ProjectEntity } from "./project.entity";
+import { TaskEntity } from "./task.entity";
 
 @Entity('user')
 export class UserEntity {
@@ -31,6 +32,15 @@ export class UserEntity {
 
     @OneToMany(() => ProjectEntity, (project) => project.creator)
     projects: ProjectEntity[]
+
+    @OneToMany(() => TaskEntity, (task) => task.assigned_by_user)
+    task_assigned_by_me: TaskEntity[]
+
+    @OneToMany(() => TaskEntity, (task) => task.creator)
+    task_created: TaskEntity[]
+
+    @OneToMany(() => TaskEntity, (task) => task.assigned_to_user)
+    task_assigned_to: TaskEntity[];
 
     @CreateDateColumn()
     created_at: Date;

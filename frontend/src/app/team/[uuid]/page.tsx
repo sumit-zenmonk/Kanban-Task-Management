@@ -47,7 +47,7 @@ export default function Home() {
                     </Typography>
                 </Box>
                 <Box className={styles.actions}>
-                    <Button variant="contained" onClick={() => setOpen(true)}>
+                    <Button variant="outlined" onClick={() => setOpen(true)}>
                         Add Member
                     </Button>
                 </Box>

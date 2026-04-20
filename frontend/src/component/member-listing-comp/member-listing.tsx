@@ -116,7 +116,7 @@ export default function MemberList() {
                             </Select>
 
                             <Button
-                                variant="contained"
+                                variant="outlined"
                                 sx={{ color: "white", background: "#DB2D43" }}
                                 onClick={() => handleDeleteMember(member.uuid)}
                             >

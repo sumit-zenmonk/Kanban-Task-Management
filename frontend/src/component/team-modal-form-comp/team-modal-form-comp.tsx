@@ -87,10 +87,10 @@ export default function CreateTeamModalComp({ open, onClose, team }: Props) {
             </DialogContent>
 
             <DialogActions>
-                <Button onClick={onClose} color="secondary" variant="contained">
+                <Button onClick={onClose} color="secondary" variant="outlined">
                     Cancel
                 </Button>
-                <Button onClick={handleSubmit(onSubmit)} variant="contained">
+                <Button onClick={handleSubmit(onSubmit)} variant="outlined">
                     {team ? "Update" : "Create"}
                 </Button>
             </DialogActions>

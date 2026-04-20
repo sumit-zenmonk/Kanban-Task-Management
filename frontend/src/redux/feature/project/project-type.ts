@@ -1,3 +1,5 @@
+import { TaskStatusEnum } from "@/enums/task.enum"
+
 export interface UserInfo {
     uuid: string
     name: string
@@ -23,6 +25,21 @@ export interface Project {
     creator_uuid: string
     team: TeamInfo
     creator: UserInfo
+    tasks: Task[]
+    created_at: string
+    updated_at: string
+    deleted_at: string | null
+}
+
+export interface Task {
+    uuid: string
+    name: string
+    description: string
+    creator_uuid: string
+    project_uuid: string
+    assigned_by_uuid: string
+    assigned_to_uuid: string | null
+    status: TaskStatusEnum
     created_at: string
     updated_at: string
     deleted_at: string | null

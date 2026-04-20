@@ -22,6 +22,7 @@ export class TeamMigration1776161924669 implements MigrationInterface {
         await queryRunner.createForeignKey(
             "team",
             new TableForeignKey({
+                name: "FK_TEAM_USER",
                 columnNames: ["creator_uuid"],
                 referencedTableName: "user",
                 referencedColumnNames: ["uuid"],
@@ -31,6 +32,7 @@ export class TeamMigration1776161924669 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.dropForeignKey("team", "FK_TEAM_USER");
         await queryRunner.dropTable("team");
     }
 }

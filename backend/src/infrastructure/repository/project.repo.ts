@@ -22,7 +22,8 @@ export class ProjectRepository extends Repository<ProjectEntity> {
                 team: {
                     creator: true
                 },
-                creator: true
+                creator: true,
+                tasks: true
             },
             select: {
                 team: {
@@ -31,7 +32,8 @@ export class ProjectRepository extends Repository<ProjectEntity> {
                     description: true,
                     creator: true
                 },
-                creator: true
+                creator: true,
+                tasks: true
             },
             order: {
                 created_at: "DESC",
@@ -51,18 +53,29 @@ export class ProjectRepository extends Repository<ProjectEntity> {
                 },
                 relations: {
                     team: {
-                        creator: true
+                        creator: true,
+                        members: { member: true }
                     },
-                    creator: true
+                    creator: true,
+                    tasks: true,
                 },
                 select: {
                     team: {
                         uuid: true,
                         name: true,
                         description: true,
-                        creator: true
+                        creator: true,
+                        members: {
+                            uuid: true,
+                            member_uuid:true,
+                            member: {
+                                uuid: true,
+                                email: true
+                            }
+                        }
                     },
-                    creator: true
+                    creator: true,
+                    tasks: true
                 },
             }
         );

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Box, Button, Typography, CircularProgress, Card, CardContent } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import styles from "./project.module.css";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { RootState } from "@/redux/store";
 import { fetchProjects, deleteProject, } from "@/redux/feature/project/project-action";
 import { enqueueSnackbar } from "notistack";
@@ -18,6 +18,7 @@ export default function ProjectPage() {
     const [open, setOpen] = useState(false);
     const [selectedProject, setSelectedProject] = useState<any>(null);
     const { projects, total_projects, loading } = useAppSelector((state: RootState) => state.projectReducer);
+    const router = useRouter();
 
     useEffect(() => {
         if (uuid) {
@@ -40,7 +41,7 @@ export default function ProjectPage() {
                 <Typography variant="h5">Projects</Typography>
 
                 <Button
-                    variant="contained"
+                    variant="outlined"
                     onClick={() => {
                         setSelectedProject(null);
                         setOpen(true);
@@ -60,7 +61,7 @@ export default function ProjectPage() {
                 </Box>
             ) : (
                 <Box>
-                    {projects.map((project) => (
+                    {projects.map((project: any) => (
                         <Card key={project.uuid} className={styles.card}>
                             <CardContent>
                                 <Box className={styles.meta}>
@@ -69,7 +70,7 @@ export default function ProjectPage() {
                                     </Typography>
 
                                     <Button
-                                        variant="contained"
+                                        variant="outlined"
                                         sx={{ color: "white", background: "#DB2D43" }}
                                         onClick={() => handleDelete(project.uuid)}
                                     >
@@ -91,26 +92,37 @@ export default function ProjectPage() {
                                     </Typography>
                                 </Box>
 
-                                <Button
-                                    variant="contained"
-                                    onClick={() => {
-                                        setSelectedProject(project);
-                                        setOpen(true);
-                                    }}
-                                >
-                                    Edit
-                                </Button>
+                                <Box className={styles.actions}>
+                                    <Button
+                                        variant="outlined"
+                                        onClick={() => {
+                                            setSelectedProject(project);
+                                            setOpen(true);
+                                        }}
+                                    >
+                                        Edit
+                                    </Button>
+                                    <Button
+                                        variant="outlined"
+                                        onClick={() => router.push(`/team/${uuid}/project/${project.uuid}`)}
+                                    >
+                                        View Task
+                                    </Button>
+                                </Box>
                             </CardContent>
                         </Card>
                     ))}
                 </Box>
-            )}
+            )
+            }
 
-            {!loading && projects.length === 0 && (
-                <Typography className={styles.empty}>
-                    No projects found
-                </Typography>
-            )}
+            {
+                !loading && projects.length === 0 && (
+                    <Typography className={styles.empty}>
+                        No projects found
+                    </Typography>
+                )
+            }
 
             <ProjectModal
                 open={open}
@@ -118,6 +130,6 @@ export default function ProjectPage() {
                 team_uuid={uuid as string}
                 project={selectedProject}
             />
-        </Box>
+        </Box >
     );
 }

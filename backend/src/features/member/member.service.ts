@@ -8,6 +8,7 @@ import { MemberRoleEnum } from "src/domain/enums/member.enum";
 import { MemberUpdateDto } from "./dto/member.update.dto";
 import { MailTrapService } from "src/infrastructure/mailtrap/mailtrap";
 import { SocketService } from "src/infrastructure/socket/socket.service";
+import { teamMemberAddedTemplate } from "src/infrastructure/mailtrap/template/template";
 
 @Injectable()
 export class MemberService {
@@ -50,11 +51,13 @@ export class MemberService {
         const proper_member = await this.memberRepo.getMemberByUuid(member.uuid);
 
         // someone added to team mail sent to user
-        // await this.mailTrapService.sendMail({
-        //     message: `just formal hi hello -> http://localhost:3000/team/${body.team_uuid}`,
-        //     subject: `You have been added to a team`,
-        //     to: member_acc?.email
-        // });
+        const emailContent = teamMemberAddedTemplate(isTeamExists.name, body.team_uuid);
+
+        await this.mailTrapService.sendMail({
+            message: emailContent,
+            subject: `You've been added to ${isTeamExists.name} team`,
+            to: member_acc?.email
+        });
 
         //send realtime-team added
         await this.socketService.emitToUser(member.member_uuid, 'member_team_joined', isTeamExists);
@@ -135,20 +138,21 @@ export class MemberService {
             throw new BadRequestException("Team not found");
         }
 
-        // own role can chnaged
-        if (user.uuid = body.uuid) {
-            throw new BadRequestException("Own Role can't be changed");
-        }
-
         // only admins can promote other admins
         const isAdmin = isTeamExists.members.filter((mem) => mem.member_uuid == user.uuid);
         if (isAdmin[0].role == MemberRoleEnum.MEMBER && body.role && (body.role as MemberRoleEnum) == MemberRoleEnum.ADMIN) {
             throw new BadRequestException("only admin can promote admins");
         }
 
+        // own role can chnaged
+        if (isAdmin[0].uuid == body.uuid) {
+            throw new BadRequestException("Self Role can't be changed");
+        }
+
+        const creator = isTeamExists.members.filter((mem) => mem.member_uuid == isTeamExists.creator.uuid);
         // ownernship can't be changed
         if (
-            isTeamExists.creator.uuid === body.uuid &&
+            creator[0].uuid === body.uuid &&
             body.role &&
             (body.role as MemberRoleEnum) !== MemberRoleEnum.ADMIN
         ) {

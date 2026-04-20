@@ -27,21 +27,25 @@ export class MemberMigration1776161924670 implements MigrationInterface {
 
         await queryRunner.createForeignKeys("member", [
             new TableForeignKey({
+                name: "FK_MEMBER_USER",
                 columnNames: ["member_uuid"],
                 referencedTableName: "user",
                 referencedColumnNames: ["uuid"]
             }),
             new TableForeignKey({
+                name: "FK_MEMBER_TEAM",
                 columnNames: ["team_uuid"],
                 referencedTableName: "team",
                 referencedColumnNames: ["uuid"]
             }),
             new TableForeignKey({
+                name: "FK_MEMBER_ROLE_BY",
                 columnNames: ["role_by"],
                 referencedTableName: "user",
                 referencedColumnNames: ["uuid"]
             }),
             new TableForeignKey({
+                name: "FK_MEMBER_ONBOARD_BY",
                 columnNames: ["onboard_by"],
                 referencedTableName: "user",
                 referencedColumnNames: ["uuid"]
@@ -50,6 +54,10 @@ export class MemberMigration1776161924670 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.dropForeignKey("member", "FK_MEMBER_USER");
+        await queryRunner.dropForeignKey("member", "FK_MEMBER_TEAM");
+        await queryRunner.dropForeignKey("member", "FK_MEMBER_ROLE_BY");
+        await queryRunner.dropForeignKey("member", "FK_MEMBER_ONBOARD_BY");
         await queryRunner.dropTable("member");
         await queryRunner.query(`DROP TYPE "public"."member_role_enum"`);
     }

@@ -3,6 +3,7 @@ import { BadRequestException, Injectable } from "@nestjs/common";
 import { JwtHelperService } from "src/infrastructure/services/jwtservice";
 import admin from "src/infrastructure/firebase/firebase-admin.config";
 import { MailTrapService } from "src/infrastructure/mailtrap/mailtrap";
+import { welcomeEmailTemplate } from "src/infrastructure/mailtrap/template/template";
 
 @Injectable()
 export class AuthService {
@@ -38,11 +39,13 @@ export class AuthService {
             const token = await this.jwtService.generateJwtToken(user);
 
             //welcome mail send
-            // await this.mailTrapService.sendMail({
-            //     message: "just formal hi hello -> http://localhost:3000/",
-            //     subject: `hello buddy welcome on joingin`,
-            //     to: user.email
-            // });
+            const emailContent = welcomeEmailTemplate(user.name);
+
+            await this.mailTrapService.sendMail({
+                message: emailContent,
+                subject: `Welcome to the platform, ${user.name}!`,
+                to: user.email
+            });
 
             return {
                 message: "Google Auth Success",

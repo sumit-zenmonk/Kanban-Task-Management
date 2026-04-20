@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from "@nestjs/common";
 import { TeamRepository } from "src/infrastructure/repository/team.repo";
 import { UserEntity } from "src/domain/entities/user.entity";
 import { ProjectCreateDto } from "./dto/project.create.dto";
-import { ProjectRepository } from "src/infrastructure/repository/projecy.repo";
+import { ProjectRepository } from "src/infrastructure/repository/project.repo";
 import { ProjectUpdateDto } from "./dto/project.update.dto";
 
 @Injectable()

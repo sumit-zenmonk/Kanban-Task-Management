@@ -102,7 +102,7 @@ export default function UserListingModalComp({ open, onClose }: Props) {
                                     </FormControl>
 
                                     <Button
-                                        variant="contained"
+                                        variant="outlined"
                                         onClick={() => handleAdd(user.uuid)}
                                         className={styles.button}
                                     >

@@ -22,11 +22,13 @@ export class ProjectMigration1776161924670 implements MigrationInterface {
 
         await queryRunner.createForeignKeys("project", [
             new TableForeignKey({
+                name: "FK_PROJECT_TEAM",
                 columnNames: ["team_uuid"],
                 referencedTableName: "team",
                 referencedColumnNames: ["uuid"]
             }),
             new TableForeignKey({
+                name: "FK_PROJECT_USER",
                 columnNames: ["creator_uuid"],
                 referencedTableName: "user",
                 referencedColumnNames: ["uuid"]
@@ -35,6 +37,8 @@ export class ProjectMigration1776161924670 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.dropForeignKey("project", "FK_PROJECT_TEAM");
+        await queryRunner.dropForeignKey("project", "FK_PROJECT_USER");
         await queryRunner.dropTable("project");
     }
 }

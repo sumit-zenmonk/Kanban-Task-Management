@@ -28,7 +28,7 @@ export default function TeamSidebarComp({ teams }: { teams: TeamState }) {
                     >
                         <Typography onClick={() => router.push(`/team/${team.uuid}`)}>{team.name}</Typography>
                         <Button
-                            variant="contained"
+                            variant="outlined"
                             onClick={() => {
                                 setActiveTeam(activeTeam === team.uuid ? null : team.uuid);
                             }}>
@@ -47,7 +47,11 @@ export default function TeamSidebarComp({ teams }: { teams: TeamState }) {
                                 {(team.projects ?? [])
                                     .filter((project) => project.team_uuid === team.uuid)
                                     .map((project) => (
-                                        <Box key={project.uuid} className={styles.project}>
+                                        <Box
+                                            key={project.uuid}
+                                            className={styles.project}
+                                            onClick={() => router.push(`/team/${team.uuid}/project/${project.uuid}`)}
+                                        >
                                             <Typography variant="body2">
                                                 {project.name}
                                             </Typography>

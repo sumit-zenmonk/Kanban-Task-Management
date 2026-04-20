@@ -43,7 +43,7 @@ export default function Home() {
                 </Box>
 
                 <Button
-                    variant="contained"
+                    variant="outlined"
                     onClick={() => {
                         setSelectedTeam(null);
                         setOpen(true);
@@ -71,7 +71,7 @@ export default function Home() {
 
                                     <Button
                                         sx={{ color: "white", background: "#DB2D43" }}
-                                        variant="contained" onClick={() => handleDelete(team.uuid)}>
+                                        variant="outlined" onClick={() => handleDelete(team.uuid)}>
                                         <DeleteIcon />
                                     </Button>
                                 </Box>
@@ -94,21 +94,21 @@ export default function Home() {
 
                                 <Box className={styles.actionBox}>
                                     <Button
-                                        variant="contained"
+                                        variant="outlined"
                                         onClick={() => router.push(`/team/${team.uuid}`)}
                                     >
                                         View Team
                                     </Button>
 
                                     <Button
-                                        variant="contained"
+                                        variant="outlined"
                                         onClick={() => router.push(`/team/${team.uuid}/project`)}
                                     >
                                         View Projects
                                     </Button>
 
                                     <Button
-                                        variant="contained"
+                                        variant="outlined"
                                         onClick={() => {
                                             setSelectedTeam(team);
                                             setOpen(true);

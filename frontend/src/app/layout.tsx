@@ -7,6 +7,7 @@ import { SnackbarProvider } from 'notistack';
 import { PersistGate } from "redux-persist/lib/integration/react";
 import { StyledEngineProvider } from "@mui/material";
 import HeaderComp from "@/component/header-comp/header-comp";
+import "react-quill-new/dist/quill.snow.css";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

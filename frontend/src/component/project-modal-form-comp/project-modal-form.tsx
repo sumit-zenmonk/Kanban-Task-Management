@@ -83,8 +83,8 @@ export default function ProjectModal({ open, onClose, team_uuid, project }: Prop
             </DialogContent>
 
             <DialogActions>
-                <Button variant="contained" onClick={onClose} color="secondary"     >Cancel</Button>
-                <Button onClick={handleSubmit(onSubmit)} variant="contained">
+                <Button variant="outlined" onClick={onClose} color="secondary"     >Cancel</Button>
+                <Button onClick={handleSubmit(onSubmit)} variant="outlined">
                     {project ? "Update" : "Create"}
                 </Button>
             </DialogActions>
