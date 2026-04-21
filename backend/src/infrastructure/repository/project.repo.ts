@@ -67,7 +67,7 @@ export class ProjectRepository extends Repository<ProjectEntity> {
                         creator: true,
                         members: {
                             uuid: true,
-                            member_uuid:true,
+                            member_uuid: true,
                             member: {
                                 uuid: true,
                                 email: true
@@ -94,5 +94,14 @@ export class ProjectRepository extends Repository<ProjectEntity> {
                 ...body
             }
         );
+    }
+
+    async getProjectByNameAndTeamUUID(name: string, team_uuid: string) {
+        return await this.findOne({
+            where: {
+                name,
+                team_uuid
+            }
+        });
     }
 }

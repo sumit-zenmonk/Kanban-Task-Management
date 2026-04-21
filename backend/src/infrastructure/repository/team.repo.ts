@@ -40,6 +40,19 @@ export class TeamRepository extends Repository<TeamEntity> {
         );
     }
 
+    async getTeamByNameAndCreatorUUID(name: string, user_uuid: string) {
+        return await this.findOne(
+            {
+                where: {
+                    name: name,
+                    creator: {
+                        uuid: user_uuid
+                    },
+                }
+            }
+        );
+    }
+
     async getTeam(user_uuid: string, offset?: number, limit?: number) {
         const [data, total] = await this.findAndCount({
             where: [

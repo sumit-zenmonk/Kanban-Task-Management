@@ -48,9 +48,9 @@ export default function CreateTeamModalComp({ open, onClose, team }: Props) {
     const onSubmit = async (data: TeamFormData) => {
         try {
             if (team) {
-                await dispatch(updateTeam({ uuid: team.uuid, ...data }));
+                await dispatch(updateTeam({ uuid: team.uuid, ...data })).unwrap();
             } else {
-                await dispatch(createTeam(data));
+                await dispatch(createTeam(data)).unwrap();
             }
             reset();
             onClose();

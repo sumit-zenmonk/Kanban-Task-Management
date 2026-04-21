@@ -30,8 +30,8 @@ function TaskCard({ task, move, onDelete, onEdit }: any) {
         data: task,
     });
     const { members, loading } = useAppSelector((state: RootState) => state.memberReducer)
-    const assigned_by = members.filter((m) => m.member_uuid === task.assigned_by_uuid)
-    const assigned_to = members.filter((m) => m.member_uuid === task.assigned_to_uuid)
+    const assigned_by = members.find((m) => m.member_uuid === task.assigned_by_uuid)
+    const assigned_to = members.find((m) => m.member_uuid === task.assigned_to_uuid)
 
     const style = {
         transform: transform
@@ -58,34 +58,34 @@ function TaskCard({ task, move, onDelete, onEdit }: any) {
                         className={styles.description}
                         dangerouslySetInnerHTML={{ __html: task.description }}
                     />
-                    {assigned_by.map((m) => (
-                        <Box key={m.uuid} className={styles.assign_box}>
+                    {assigned_by &&
+                        <Box key={assigned_by.uuid} className={styles.assign_box}>
                             <Typography className={styles.assign_title}>Assigned By</Typography>
                             <Box className={styles.assign_avatar_box}>
                                 <Avatar
-                                    src={m.member.image || "/user.svg"}
-                                    alt={m.member.name}
+                                    src={assigned_by.member.image || "/user.svg"}
+                                    alt={assigned_by.member.name}
                                 />
                                 <Typography variant="caption" color="text.secondary">
-                                    {m.member.email}
+                                    {assigned_by.member.email}
                                 </Typography>
                             </Box>
                         </Box>
-                    ))}
-                    {assigned_to.map((m) => (
-                        <Box key={m.uuid} className={styles.assign_box}>
-                            <Typography className={styles.assign_title}>Assigned to</Typography>
+                    }
+                    {assigned_to &&
+                        <Box key={assigned_to.uuid} className={styles.assign_box}>
+                            <Typography className={styles.assign_title}>Assigned To</Typography>
                             <Box className={styles.assign_avatar_box}>
                                 <Avatar
-                                    src={m.member.image || "/user.svg"}
-                                    alt={m.member.name}
+                                    src={assigned_to.member.image || "/user.svg"}
+                                    alt={assigned_to.member.name}
                                 />
                                 <Typography variant="caption" color="text.secondary">
-                                    {m.member.email}
+                                    {assigned_to.member.email}
                                 </Typography>
                             </Box>
                         </Box>
-                    ))}
+                    }
                 </Box>
                 <Box className={styles.actions}>
                     <Button variant="outlined" size="small" onClick={() => onEdit(task)}>

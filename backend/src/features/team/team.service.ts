@@ -15,6 +15,11 @@ export class TeamService {
     }
 
     async createTeam(user: UserEntity, body: TeamCreateDto) {
+        const isSameNameExistsWithUser = await this.teamRepo.getTeamByNameAndCreatorUUID(body.name, user.uuid);
+        if (isSameNameExistsWithUser) {
+            throw new BadRequestException("Team With Name Already Exists");
+        }
+
         const team = await this.teamRepo.createTeam({
             ...body,
             creator: user,
