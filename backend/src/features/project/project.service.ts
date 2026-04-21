@@ -26,6 +26,11 @@ export class ProjectService {
             throw new BadRequestException("member not recognised");
         }
 
+        const isSameProjectNameExists = await this.projectRepo.getProjectByNameAndTeamUUID(body.name, isTeamExists.uuid);
+        if (isSameProjectNameExists) {
+            throw new BadRequestException("Project With Same Name Exists");
+        }
+
         const project = await this.projectRepo.createProject({ ...body, creator_uuid: user.uuid });
         const proper_project = await this.projectRepo.getProjectByUuid(project.uuid);
 
