@@ -9,6 +9,7 @@ import { MemberUpdateDto } from "./dto/member.update.dto";
 import { MailTrapService } from "src/infrastructure/mailtrap/mailtrap";
 import { SocketService } from "src/infrastructure/socket/socket.service";
 import { teamMemberAddedTemplate } from "src/infrastructure/mailtrap/template/template";
+import { MemberExitDto } from "./dto/member.exit.dto";
 
 @Injectable()
 export class MemberService {
@@ -164,5 +165,18 @@ export class MemberService {
         return {
             message: "Member updated Success"
         }
+    }
+
+    async exitTeam(user: UserEntity, body: MemberExitDto) {
+        const isMemberExists = await this.memberRepo.getMemberByMemberUuidAndTeamUUid(body.team_uuid,user.uuid);
+        if (!isMemberExists) {
+            throw new BadRequestException("Member not found");
+        }
+
+        await this.memberRepo.exitTeam(isMemberExists.uuid);
+
+        return {
+            message: "Team Exit Success"
+        };
     }
 }

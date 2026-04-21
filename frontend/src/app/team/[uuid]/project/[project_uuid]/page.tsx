@@ -14,6 +14,8 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks.ts";
 import { enqueueSnackbar } from "notistack";
 import { TaskStatusEnum } from "@/enums/task.enum";
 import { fetchMembers } from "@/redux/feature/member/member-action";
+import { connectSocket } from "@/service/socket";
+let socket: any;
 
 const statuses = [
     TaskStatusEnum.TODO,
@@ -22,7 +24,7 @@ const statuses = [
     TaskStatusEnum.DONE,
 ];
 
-function TaskCard({ task, onDelete, onEdit }: any) {
+function TaskCard({ task, move, onDelete, onEdit }: any) {
     const { setNodeRef, listeners, attributes, transform, isDragging } = useDraggable({
         id: task.uuid,
         data: task,
@@ -32,14 +34,18 @@ function TaskCard({ task, onDelete, onEdit }: any) {
     const assigned_to = members.filter((m) => m.member_uuid === task.assigned_to_uuid)
 
     const style = {
-        transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : undefined,
+        transform: transform
+            ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
+            : move
+                ? `translate3d(${move.x}px, ${move.y}px, 0)`
+                : undefined,
         opacity: isDragging ? 0.5 : 1,
         zIndex: isDragging ? 999 : 999,
         cursor: "grab",
     };
 
     return (
-        <Card ref={setNodeRef} className={styles.card} style={style}>
+        <Card ref={setNodeRef} className={styles.card} style={style} data-task-id={task.uuid} >
             <CardContent>
                 <Box {...listeners} {...attributes} className={styles.taskCard}>
                     <Box className={styles.cardHeader}>
@@ -94,7 +100,7 @@ function TaskCard({ task, onDelete, onEdit }: any) {
     );
 }
 
-function TaskBox({ status, tasks, onDelete, onEdit }: any) {
+function TaskBox({ status, liveMoves, tasks, onDelete, onEdit }: any) {
     const { setNodeRef, isOver } = useDroppable({
         id: status,
     });
@@ -113,6 +119,7 @@ function TaskBox({ status, tasks, onDelete, onEdit }: any) {
                     <TaskCard
                         key={task.uuid}
                         task={task}
+                        move={liveMoves[task.uuid]}
                         onDelete={onDelete}
                         onEdit={onEdit}
                     />
@@ -128,6 +135,8 @@ export default function TaskPage() {
     const { projects } = useAppSelector((state: RootState) => state.projectReducer);
     const [open, setOpen] = useState(false);
     const [selectedTask, setSelectedTask] = useState<any>(null);
+    const { token } = useAppSelector((state: RootState) => state.authReducer);
+    const [liveMoves, setLiveMoves] = useState<Record<string, { x: number; y: number }>>({});
 
     const project = projects.find((p) => p.uuid === project_uuid);
 
@@ -141,6 +150,35 @@ export default function TaskPage() {
         dispatch(fetchMembers({}))
     }, [dispatch])
 
+    useEffect(() => {
+        if (token && project_uuid) {
+            socket = connectSocket(token);
+
+            socket.emit("project_connect", { project_uuid });
+
+            socket.on("task_move", ({ task_uuid, x, y }: { task_uuid: string; x: number; y: number }) => {
+                setLiveMoves((prev) => ({
+                    ...prev,
+                    [task_uuid]: { x, y },
+                }));
+            });
+
+            socket.on("task_updated", ({ task_uuid, status }: { task_uuid: string, status: TaskStatusEnum }) => {
+                setLiveMoves((prev) => {
+                    const copy = { ...prev };
+                    delete copy[task_uuid];
+                    return copy;
+                });
+
+                dispatch(fetchProjectById({ uuid: project_uuid as string }));
+            });
+
+            return () => {
+                socket.off("task_move");
+                socket.disconnect();
+            };
+        }
+    }, [token, project_uuid]);
 
     const handleDragEnd = async ({ active, over }: any) => {
         if (!over) return;
@@ -181,7 +219,17 @@ export default function TaskPage() {
                 </Button>
             </Box>
 
-            <DndContext onDragEnd={handleDragEnd}>
+            <DndContext
+                onDragEnd={handleDragEnd}
+                onDragMove={({ active, delta }) => {
+                    socket.emit("task_move", {
+                        task_uuid: active.id,
+                        x: delta.x,
+                        y: delta.y,
+                        project_uuid,
+                    });
+                }}
+            >
                 <Box className={styles.board}>
                     {statuses.map((status) => (
                         <TaskBox
@@ -190,6 +238,7 @@ export default function TaskPage() {
                             tasks={(project?.tasks || []).filter(
                                 (t: any) => t.status === status
                             )}
+                            liveMoves={liveMoves}
                             onDelete={handleDelete}
                             onEdit={(task: any) => {
                                 setSelectedTask(task);

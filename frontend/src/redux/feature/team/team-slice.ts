@@ -27,11 +27,18 @@ const teamSlice = createSlice({
             const isExists = state.teams.findIndex((team) => team.uuid == action.payload.uuid);
             if (isExists == -1) {
                 state.teams.push(action.payload);
+                state.total_teams++;
             }
         },
         socketTeamRemoved: (state, action) => {
             const restTeams = state.teams.filter((team) => team.uuid !== action.payload.uuid);
             state.teams = restTeams;
+            state.total_teams--;
+        },
+        exitTeamRemoved: (state, action) => {
+            const restTeams = state.teams.filter((team) => team.uuid !== action.payload.team_uuid);
+            state.teams = restTeams;
+            state.total_teams--;
         }
     },
     extraReducers: (builder) => {
@@ -106,5 +113,5 @@ const teamSlice = createSlice({
     },
 })
 
-export const { resetTeamState, socketTeamAdded, socketTeamRemoved } = teamSlice.actions
+export const { resetTeamState, socketTeamAdded, socketTeamRemoved, exitTeamRemoved } = teamSlice.actions
 export default teamSlice.reducer

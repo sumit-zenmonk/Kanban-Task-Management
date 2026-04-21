@@ -1,6 +1,9 @@
 import {
+    ConnectedSocket,
+    MessageBody,
     OnGatewayConnection,
     OnGatewayDisconnect,
+    SubscribeMessage,
     WebSocketGateway,
     WebSocketServer,
 } from '@nestjs/websockets';
@@ -66,5 +69,22 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
         if (socketId) {
             this.server.to(socketId).emit(event, data);
         }
+    }
+
+    @SubscribeMessage('project_connect')
+    handleProjectConnection(
+        @MessageBody() data: any,
+        @ConnectedSocket() client: Socket
+    ) {
+        client.join(data.project_uuid);
+    }
+
+    @SubscribeMessage('task_move')
+    handleTaskMove(
+        @MessageBody() data: any,
+        @ConnectedSocket() client: Socket
+    ) {
+        const { project_uuid } = data;
+        client.to(project_uuid).emit('task_move', data);
     }
 }

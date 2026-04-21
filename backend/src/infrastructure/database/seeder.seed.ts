@@ -15,7 +15,7 @@ async function create() {
 
     try {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        for (const _ of Array.from(Array(15).keys())) {
+        for (const _ of Array.from(Array(35).keys())) {
             await queryRunner.manager.save(UserEntity, {
                 email: faker.internet.email(),
                 image: faker.image.personPortrait(),

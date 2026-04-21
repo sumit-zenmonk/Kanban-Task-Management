@@ -3,6 +3,7 @@ import type { Request } from "express";
 import { MemberCreateDto } from "./dto/member.create.dto";
 import { MemberService } from "./member.service";
 import { MemberUpdateDto } from "./dto/member.update.dto";
+import { MemberExitDto } from "./dto/member.exit.dto";
 
 @Controller('/member')
 export class MemberController {
@@ -11,6 +12,11 @@ export class MemberController {
     @Post()
     async createTeam(@Req() req: Request, @Body() body: MemberCreateDto) {
         return this.memberService.createMember(req.user, body);
+    }
+
+    @Post('/exit')
+    async exitTeam(@Req() req: Request, @Body() body: MemberExitDto) {
+        return await this.memberService.exitTeam(req.user, body);
     }
 
     @Get('/:uuid')

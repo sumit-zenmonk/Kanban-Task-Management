@@ -6,11 +6,11 @@ export class MailTrapService {
     constructor(private readonly mailService: MailerService) { }
 
     sendMail({ to, subject, message }) {
-        this.mailService.sendMail({
-            from: '"Sumit App" <hello@demomailtrap.co>',
-            to: to,
-            subject: subject,
-            text: message,
-        });
+        // this.mailService.sendMail({
+        //     from: '"Sumit App" <hello@demomailtrap.co>',
+        //     to: to,
+        //     subject: subject,
+        //     text: message,
+        // });
     }
 }

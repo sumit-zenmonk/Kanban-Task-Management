@@ -22,6 +22,14 @@ export class TaskRepository extends Repository<TaskEntity> {
         });
     }
 
+    async getTaskByUUID(uuid: string) {
+        return await this.findOne({
+            where: {
+                uuid
+            }
+        });
+    }
+
     async deleteTask(uuid: string) {
         return await this.softDelete(uuid);
     }

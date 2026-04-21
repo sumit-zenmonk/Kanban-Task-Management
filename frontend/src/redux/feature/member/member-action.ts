@@ -153,3 +153,32 @@ export const updateMember = createAsyncThunk<
         }
     }
 )
+
+export const exitMember = createAsyncThunk<
+    { message: string },
+    { team_uuid: string },
+    { state: RootState }
+>(
+    "member/exit",
+    async (payload, { getState, rejectWithValue }) => {
+        try {
+            const token = getState().authReducer.token || ""
+
+            const res = await fetch(`${API_URL}/member/exit`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: token,
+                },
+                body: JSON.stringify(payload),
+            })
+
+            const data = await res.json()
+            if (!res.ok) throw new Error(data.message)
+
+            return data
+        } catch (err: any) {
+            return rejectWithValue(err.message)
+        }
+    }
+)

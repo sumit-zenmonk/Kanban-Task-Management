@@ -17,7 +17,7 @@ export const fetchUsers = createAsyncThunk<
         try {
             const token = getState().authReducer.token || ""
 
-            const res = await fetch(`${API_URL}/user?offset=${offset}?limit=${limit}`, {
+            const res = await fetch(`${API_URL}/user?offset=${offset}&limit=${limit}`, {
                 method: "GET",
                 headers: {
                     Authorization: token,

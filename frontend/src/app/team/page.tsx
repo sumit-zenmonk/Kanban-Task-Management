@@ -9,7 +9,10 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks.ts";
 import CreateTeamModal from "@/component/team-modal-form-comp/team-modal-form-comp";
 import { useRouter } from "next/navigation";
 import DeleteIcon from '@mui/icons-material/Delete';
+import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 import { enqueueSnackbar } from "notistack";
+import { exitMember } from "@/redux/feature/member/member-action";
+import { exitTeamRemoved } from "@/redux/feature/team/team-slice";
 
 export default function Home() {
     const dispatch = useAppDispatch();
@@ -28,6 +31,16 @@ export default function Home() {
             await dispatch(deleteTeam({ uuid })).unwrap();
         } catch (err: any) {
             console.log('Deleteion Team Error', err);
+            enqueueSnackbar(err, { variant: "error" });
+        }
+    }
+
+    const handleExit = async (team_uuid: string) => {
+        try {
+            await dispatch(exitMember({ team_uuid })).unwrap();
+            dispatch(exitTeamRemoved({ team_uuid }));
+        } catch (err: any) {
+            console.log('Exit Team Error', err);
             enqueueSnackbar(err, { variant: "error" });
         }
     }
@@ -69,11 +82,23 @@ export default function Home() {
                                 <Box className={styles.meta}>
                                     <Typography variant="h6" className={styles.name}>{team.name}</Typography>
 
-                                    <Button
-                                        sx={{ color: "white", background: "#DB2D43" }}
-                                        variant="outlined" onClick={() => handleDelete(team.uuid)}>
-                                        <DeleteIcon />
-                                    </Button>
+                                    <Box>
+                                        {team.creator.uuid !== user?.uid &&
+                                            <Button
+                                                sx={{ color: "#097969", borderColor: "#097969" }}
+                                                variant="outlined" onClick={() => handleExit(team.uuid)}>
+                                                <MeetingRoomIcon />
+                                            </Button>
+                                        }
+
+                                        {team.creator.uuid == user?.uid &&
+                                            <Button
+                                                sx={{ color: "#DB2D43", borderColor: "#DB2D43" }}
+                                                variant="outlined" onClick={() => handleDelete(team.uuid)}>
+                                                <DeleteIcon />
+                                            </Button>
+                                        }
+                                    </Box>
                                 </Box>
                                 <Typography
                                     variant="body2"

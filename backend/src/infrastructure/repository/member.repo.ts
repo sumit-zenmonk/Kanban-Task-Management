@@ -97,4 +97,8 @@ export class MemberRepository extends Repository<MemberEntity> {
             }
         );
     }
+
+    async exitTeam(uuid: string) {
+        return await this.softDelete(uuid);
+    }
 }

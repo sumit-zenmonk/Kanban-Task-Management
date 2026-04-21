@@ -33,7 +33,16 @@ const userSlice = createSlice({
             .addCase(fetchUsers.fulfilled, (state, action) => {
                 state.loading = false
                 state.status = "succeed"
-                state.users = action.payload.users
+                const newUsers = action.payload.users
+
+                if (action.meta.arg.offset === 0) {
+                    state.users = newUsers
+                } else {
+                    const merged = [...state.users, ...newUsers]
+                    state.users = Array.from(
+                        new Map(merged.map(user => [user.uuid, user])).values()
+                    )
+                }
                 state.total_users = action.payload.total
             })
             .addCase(fetchUsers.rejected, (state, action) => {
