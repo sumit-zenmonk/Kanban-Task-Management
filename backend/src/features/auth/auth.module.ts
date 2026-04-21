@@ -3,12 +3,12 @@ import { AuthService } from "./auth.service";
 import { UserRepository } from "src/infrastructure/repository/user.repo";
 import { AuthController } from "./auth.controller";
 import { JwtHelperService } from "src/infrastructure/services/jwtservice";
-import { MailTrapService } from "src/infrastructure/mailtrap/mailtrap";
+import { MailService } from "src/infrastructure/mail/mail";
 
 @Module({
     imports: [],
     controllers: [AuthController],
-    providers: [JwtHelperService, UserRepository, AuthService, MailTrapService],
+    providers: [JwtHelperService, UserRepository, AuthService, MailService],
     exports: [AuthModule],
 })
 

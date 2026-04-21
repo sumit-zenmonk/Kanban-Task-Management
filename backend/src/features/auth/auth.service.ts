@@ -2,15 +2,15 @@ import { UserRepository } from "src/infrastructure/repository/user.repo";
 import { BadRequestException, Injectable } from "@nestjs/common";
 import { JwtHelperService } from "src/infrastructure/services/jwtservice";
 import admin from "src/infrastructure/firebase/firebase-admin.config";
-import { MailTrapService } from "src/infrastructure/mailtrap/mailtrap";
-import { welcomeEmailTemplate } from "src/infrastructure/mailtrap/template/template";
+import { MailService } from "src/infrastructure/mail/mail";
+import { welcomeEmailTemplate } from "src/infrastructure/mail/template/template";
 
 @Injectable()
 export class AuthService {
     constructor(
         private readonly userRepo: UserRepository,
         private readonly jwtService: JwtHelperService,
-        private readonly mailTrapService: MailTrapService
+        private readonly mailService: MailService
     ) { }
 
     async googleAuth(idToken: string) {
@@ -41,7 +41,7 @@ export class AuthService {
             //welcome mail send
             const emailContent = welcomeEmailTemplate(user.name);
 
-            await this.mailTrapService.sendMail({
+            await this.mailService.sendMail({
                 message: emailContent,
                 subject: `Welcome to the platform, ${user.name}!`,
                 to: user.email

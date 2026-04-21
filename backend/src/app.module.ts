@@ -38,7 +38,7 @@ import { TaskModule } from './features/task/task.module';
     MailerModule.forRoot({
       transport: {
         host: process.env.EMAIL_HOST,
-        port: Number(process.env.EMAIL_POST) || 2525,
+        port: Number(process.env.EMAIL_PORT) || 465,
         auth: {
           user: process.env.EMAIL_USERNAME,
           pass: process.env.EMAIL_PASSWORD,
