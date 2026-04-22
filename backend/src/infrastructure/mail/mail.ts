@@ -5,13 +5,17 @@ import { Injectable } from '@nestjs/common';
 export class MailService {
     constructor(private readonly mailService: MailerService) { }
 
-    sendMail({ to, subject, message }) {
-        this.mailService.sendMail({
-            from: `"Kanban Management" <${process.env.EMAIL_USERNAME || 'Kanban Zenmonk Management'}>`,
-            to: to,
-            subject: subject,
-            html: message,
-            text: message,
-        });
+    async sendMail({ to, subject, message }) {
+        try {
+            await this.mailService.sendMail({
+                from: `"Kanban Management" <${process.env.EMAIL_USERNAME}>`,
+                to,
+                subject,
+                html: message,
+                text: message,
+            });
+        } catch (error) {
+            console.error('Mail error:', error);
+        }
     }
 }
