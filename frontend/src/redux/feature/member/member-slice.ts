@@ -48,7 +48,15 @@ const memberSlice = createSlice({
             .addCase(fetchMembers.fulfilled, (state, action) => {
                 state.loading = false
                 state.status = "succeed"
-                state.members = action.payload.members
+
+                const offset = action.meta.arg?.offset ?? 0;
+                const isPagination = offset > 0;
+
+                if (isPagination) {
+                    state.members = [...state.members, ...action.payload.members]
+                } else {
+                    state.members = action.payload.members
+                }
                 state.total_members = action.payload.total
             })
             .addCase(fetchMembers.rejected, (state, action) => {
