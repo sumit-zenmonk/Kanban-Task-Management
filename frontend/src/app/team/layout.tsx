@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import { connectSocket, disconnectSocket } from "@/service/socket";
 import { socketTeamAdded } from "@/redux/feature/team/team-slice";
 import { socketTeamRemoved } from "../../redux/feature/team/team-slice";
+import HeaderComp from "@/component/header-comp/header-comp";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     const team_state = useAppSelector((state: RootState) => state.teamReducer);
@@ -35,11 +36,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
     return (
         <Box className={styles.layout}>
-            <Box className={styles.sidebar}>
-                <TeamSidebarComp teams={team_state} />
-            </Box>
-            <Box className={styles.children}>
-                {children}
+            <HeaderComp />
+            <Box>
+                <Box className={styles.sidebar}>
+                    <TeamSidebarComp teams={team_state} />
+                </Box>
+                <Box className={styles.children}>
+                    {children}
+                </Box>
             </Box>
         </Box>
     );

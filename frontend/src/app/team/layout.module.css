@@ -2,6 +2,7 @@
     width: 100%;
     height: 93%;
     display: flex;
+    flex-direction: column;
 }
 
 .sidebar {

@@ -2,7 +2,7 @@
 
 import styles from "./login.module.css"
 import { useDispatch } from "react-redux"
-import { AppDispatch } from "@/redux/store"
+import { AppDispatch, RootState } from "@/redux/store"
 import { googleLogin } from "@/redux/feature/auth/auth-action"
 import { useRouter } from "next/navigation"
 
@@ -16,15 +16,17 @@ import {
 } from "@mui/material"
 import { enqueueSnackbar } from "notistack"
 import Image from "next/image"
+import { useAppSelector } from "@/redux/hooks.ts"
 
 export default function LoginForm() {
     const dispatch = useDispatch<AppDispatch>()
+    const { loading } = useAppSelector((state: RootState) => state.authReducer);
     const router = useRouter()
 
     const handleGoogleLogin = async () => {
         try {
             await dispatch(googleLogin()).unwrap()
-            router.replace("/")
+            router.replace("/team")
         } catch (error) {
             console.error(error)
         }
@@ -41,6 +43,7 @@ export default function LoginForm() {
                     variant="outlined"
                     className={styles.providerLoginBox}
                     onClick={handleGoogleLogin}
+                    loading={loading}
                 >
                     {/* <GoogleIcon /> */}
                     <Image
